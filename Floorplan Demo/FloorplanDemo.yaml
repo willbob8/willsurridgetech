@@ -1,0 +1,460 @@
+##### ADD THIS INTO YOUR MAIN CONFIGURATION FILE #####
+sensor:
+  - platform: template
+    sensors:
+        ## Calculates daylight brightness out of 100%
+      sunlight_pct:
+        entity_id:
+          - sun.sun
+          - sensor.dark_sky_cloud_coverage
+        value_template: >-
+          {%- set elevation = state_attr('sun.sun','elevation') | float %}
+          {%- set cloud_coverage = states('sensor.dark_sky_cloud_coverage') | float %}
+          {%- set cloud_factor = (1 - (0.75 * ( cloud_coverage / 100) ** 3 )) %}
+          {%- set min_elevation = -6 %}
+          {%- set max_elevation = 90 %}
+          {%- set adjusted_elevation = elevation - min_elevation %}
+          {%- set adjusted_elevation = [adjusted_elevation,0] | max %}
+          {%- set adjusted_elevation = [adjusted_elevation,max_elevation - min_elevation] | min %}
+          {%- set adjusted_elevation = adjusted_elevation / (max_elevation - min_elevation) %}
+          {%- set adjusted_elevation = adjusted_elevation %}
+          {%- set adjusted_elevation = adjusted_elevation * 100 %}
+          {%- set brightness = adjusted_elevation * cloud_factor %}
+          {{ brightness | round }}
+        unit_of_measurement: '%'
+        device_class: 'illuminance'
+
+      sunlight_opacity:
+        entity_id:
+          - sensor.sunlight_pct
+        value_template: >-
+          {%- set sunpct = states('sensor.sunlight_pct') | float %}
+          {%- set opacity = sunpct / 100 | float %}
+          {{ opacity }}
+
+      #### Also include a numebr of these if you are adding the heating
+      #### Rename them, and double check the state attribute is correct for your system
+      bedroom_heat:
+        friendly_name: 'Bedroom Heat'
+        value_template: "{{ state_attr('climate.bedroom', 'hvac_action') }}"
+
+
+##### ADD THIS INTO YOUR LOVELACE ####
+## RESOURCES REQUIRED ###
+resources:
+  - url: /hacsfiles/config-template-card/config-template-card.js  ###HACS###
+    type: module
+  - url: /hacsfiles/light-entity-card/light-entity-card.js   ###HACS###
+    type: module
+  - url: /local/custom-lovelace/light-slider-card-lajv.js   ###LINKED BELOW###
+    type: js
+  - url: /community_plugin/mini-media-player/mini-media-player-bundle.js   ###HACS###
+    type: module
+  - url: /hacsfiles/decluttering-card/decluttering-card.js   ###HACS###
+    type: module
+
+
+decluttering_templates:
+  floorplan_light_colour:
+    element:
+      entity: '[[entity]]'
+      hold_action:
+        action: call-service
+        service: browser_mod.popup
+        service_data:
+          card:
+            type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: '[[entity]]'
+                    secondary_info: last-changed
+              - type: horizontal-stack
+                cards:
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:light-entity-card
+                        entity: '[[entity]]'
+                        color_temp: true
+                        color_wheel: true
+                        full_width_sliders: true
+                        smooth_color_wheel: true
+                        persist_features: true
+                        header: false
+                        effects_list: false
+                        brightness: false
+                        white_value: false
+                        color_picker: false
+                        style: |
+                            ha-card {
+                              box-shadow: none !important;
+                            }
+                      - type: custom:light-entity-card
+                        entity: '[[entity]]'
+                        color_wheel: true
+                        color_picker: true
+                        effects_list: true
+                        full_width_sliders: true
+                        smooth_color_wheel: true
+                        persist_features: true
+                        header: false
+                        brightness: false
+                        color_temp: false
+                        white_value: false
+                        style: |
+                            ha-card {
+                              box-shadow: none !important;
+                            }
+                  - type: 'custom:light-slider-card'
+                    entity: '[[entity]]'
+                    color_temp: true
+                    header: false
+                    persist_features: true
+
+          deviceID:
+            - this
+          style:
+            '--ha-card-border-radius': 0vw 0vw 0.8vw 0.8vw
+            border-radius: 0.8vw
+            opacity: 0.9
+          title: '[[name]]'
+      icon: 'checkbox-blank-circle'
+      style:
+        '--iron-icon-height': 2vw
+        '--iron-icon-width': 2vw
+        '--paper-item-icon-active-color': '#CCCCCC'
+        '--paper-item-icon-color': '#CCCCCC'
+        align-items: center
+        background-color: '#CCCCCC'
+        border-radius: 100%
+        box-shadow: '0px 0px 28px 0px rgba(0,0,0,0.39)'
+        display: flex
+        height: 2vw
+        justify-content: center
+        left: '[[left]]'
+        margin-left: '-1.5vw'
+        margin-top: '-1.5vw'
+        top: '[[top]]'
+        width: 2vw
+      tap_action:
+        action: toggle
+      type: state-icon
+
+  floorplan_media_player:
+    element:
+      entity: '[[entity]]'
+      hold_action:
+        action: call-service
+        service: browser_mod.popup
+        service_data:
+          card:
+            type: vertical-stack
+            cards:
+              - type: custom:mini-media-player
+                entity: '[[entity]]'
+                source: icon
+                artwork: none
+                hide:
+                  power: true
+                  icon: true
+                speaker_group:
+                  platform: sonos
+                  show_group_count: true
+                  entities:
+                    - entity_id: '[[group1]]'
+                      name: '[[group1Name]]'
+                shortcuts:
+                  columns: 4 # Max buttons per row
+                  buttons:
+                    - icon: mdi:pine-tree
+                      type: playlist
+                      id: spotify:user:spotify:playlist:37i9dQZF1DX0Yxoavh5qJV
+                    - icon: mdi:music-clef-treble
+                      type: source
+                      id: Classic FM
+          deviceID:
+            - this
+          style:
+            '--ha-card-border-radius': 0vw 0vw 0.8vw 0.8vw
+            border-radius: 0.8vw
+            opacity: 0.9
+          title: '[[name]]'
+      icon: mdi:speaker
+      style:
+        '--iron-icon-height': 2vw
+        '--iron-icon-width': 2vw
+        '--paper-item-icon-active-color': '#2b2b2b'
+        '--paper-item-icon-color': '#2b2b2b'
+        align-items: center
+        background-color: '#CCCCCC'
+        border-radius: 100%
+        box-shadow: '0px 0px 28px 0px rgba(0,0,0,0.39)'
+        display: flex
+        height: 2.5vw
+        justify-content: center
+        left: '[[left]]'
+        margin-left: '-1.5vw'
+        margin-top: '-1.5vw'
+        top: '[[top]]'
+        width: 2.5vw
+      tap_action:
+        action: call-service
+        service: media_player.media_play_pause
+        service_data:
+          entity_id: '[[entity]]'
+      type: state-icon
+
+  floorplan_heating:
+    element:
+      type: image
+      action: none
+      entity: '[[sensor]]'
+      hold_action:
+       action: none
+      image: /local/images/FloorplanDemo/RadOff.png
+      state_image:
+        "heating": /local/images/FloorplanDemo/RadOn.png
+      style:
+        top: '[[top]]'
+        left: '[[left]]'
+        width: 5vw
+        height: 2vw
+      tap_action:
+        action: call-service
+        service: browser_mod.popup
+        service_data:
+          card:
+            type: vertical-stack
+            cards:
+              - type: thermostat
+                entity: '[[climate]]'
+          deviceID:
+            - this
+          style:
+            '--ha-card-border-radius': 0vw 0vw 0.8vw 0.8vw
+            border-radius: 0.8vw
+            opacity: 0.9
+          title: '[[name]]'
+
+title: Floorplan
+icon: mdi:floor-plan
+path: floorplanDemo
+panel: true
+cards:
+  - type: "custom:config-template-card"
+    entities:
+      - light.sitting_left_orb
+      - light.sitting_room_main
+      - light.bedroom_light
+      - light.bedside_right
+      - light.counter_led
+
+    card:
+      type: picture-elements
+      image: /local/images/FloorplanDemo/Night.png
+      style: |
+        ha-card:first-child {
+          background: rgba(42, 46, 48, 1)
+        }
+      elements:
+      ### Overlay day time image when the sun is up ###
+        - type: image
+          action: none
+          entity: sun.sun
+          state_image:
+            above_horizon: /local/images/FloorplanDemo/Day.png
+            below_horizon: /local/images/transparent.png
+          style:
+            height: 100%
+            left: 50%
+            mix-blend-mode: lighten
+            opacity: '${ states[''sensor.sunlight_opacity''].state }'
+            top: 50%
+            width: 100%
+          tap_action:
+            action: none
+          hold_action:
+            action: none
+
+      ### Overlay light image when the light is on ###
+        - type: image
+          action: none
+          entity: light.sitting_left_orb
+          hold_action:
+           action: none
+          image: /local/images/FloorplanDemo/FloorLight.png
+          style:
+            filter: >-
+              ${ "hue-rotate(" + (states['light.sitting_left_orb'].attributes.hs_color
+              ? states['light.sitting_left_orb'].attributes.hs_color[0] : 0) + "deg)"}
+            left: 50%
+            mix-blend-mode: lighten
+            opacity: "${states['light.sitting_left_orb'].state === 'on' ? (states['light.sitting_left_orb'].attributes.brightness / 255) : '0'}"
+            top: 50%
+            width: 100%
+            height: 100%
+          tap_action:
+            action: none
+
+        - type: image
+          action: none
+          entity: light.bedroom_light
+          hold_action:
+           action: none
+          image: /local/images/FloorplanDemo/BedMain.png
+          style:
+            filter: >-
+              ${ "hue-rotate(" + (states['light.bedroom_light'].attributes.hs_color
+              ? states['light.bedroom_light'].attributes.hs_color[0] : 0) + "deg)"}
+            left: 50%
+            mix-blend-mode: lighten
+            opacity: "${states['light.bedroom_light'].state === 'on' ? (states['light.bedroom_light'].attributes.brightness / 255) : '0'}"
+            top: 50%
+            width: 100%
+            height: 100%
+          tap_action:
+            action: none
+
+        - type: image
+          action: none
+          entity: light.bedside_right
+          hold_action:
+           action: none
+          image: /local/images/FloorplanDemo/Bedside.png
+          style:
+            filter: >-
+              ${ "hue-rotate(" + (states['light.bedside_right'].attributes.hs_color
+              ? states['light.bedside_right'].attributes.hs_color[0] : 0) + "deg)"}
+            left: 50%
+            mix-blend-mode: lighten
+            opacity: "${states['light.bedside_right'].state === 'on' ? (states['light.bedside_right'].attributes.brightness / 255) : '0'}"
+            top: 50%
+            width: 100%
+            height: 100%
+          tap_action:
+            action: none
+
+        - type: image
+          action: none
+          entity: light.sitting_room_main
+          hold_action:
+           action: none
+          image: /local/images/FloorplanDemo/SittingMain.png
+          style:
+            filter: >-
+              ${ "hue-rotate(" + (states['light.sitting_room_main'].attributes.hs_color
+              ? states['light.sitting_room_main'].attributes.hs_color[0] : 0) + "deg)"}
+            left: 50%
+            mix-blend-mode: lighten
+            opacity: "${states['light.sitting_room_main'].state === 'on' ? (states['light.sitting_room_main'].attributes.brightness / 255) : '0'}"
+            top: 50%
+            width: 100%
+            height: 100%
+          tap_action:
+            action: none
+
+        - type: image
+          action: none
+          entity: light.counter_led
+          hold_action:
+           action: none
+          image: /local/images/FloorplanDemo/FluorescentTube.png
+          style:
+            filter: >-
+              ${ "hue-rotate(" + (states['light.counter_led'].attributes.hs_color
+              ? states['light.counter_led'].attributes.hs_color[0] : 0) + "deg)"}
+            left: 50%
+            mix-blend-mode: lighten
+            opacity: "${states['light.counter_led'].state === 'on' ? (states['light.counter_led'].attributes.brightness / 255) : '0'}"
+            top: 50%
+            width: 100%
+            height: 100%
+          tap_action:
+            action: none
+
+
+
+
+
+####### ADD THE BUTTONS! ###
+
+        - type: custom:decluttering-card
+          template: floorplan_light_colour
+          variables:
+            - entity: light.sitting_left_orb
+            - left: 23%
+            - top: 28%
+            - type: state-icon
+            - name: Floor Light
+        - type: custom:decluttering-card
+          template: floorplan_light_colour
+          variables:
+            - entity: light.sitting_room_main
+            - left: 40%
+            - top: 50%
+            - type: state-icon
+            - name: Sitting Room Light
+        - type: custom:decluttering-card
+          template: floorplan_light_colour
+          variables:
+            - entity: light.counter_led
+            - left: 53%
+            - top: 80%
+            - type: state-icon
+            - name: Counter Light
+
+        - type: custom:decluttering-card
+          template: floorplan_light_colour
+          variables:
+            - entity: light.bedside_right
+            - left: 65%
+            - top: 80%
+            - type: state-icon
+            - name: Bedside Light
+        - type: custom:decluttering-card
+          template: floorplan_light_colour
+          variables:
+            - entity: light.bedroom_light
+            - left: 70%
+            - top: 50%
+            - type: state-icon
+            - name: Bedroom Light
+
+        - type: custom:decluttering-card
+          template: floorplan_media_player
+          variables:
+            - entity: media_player.bedroom
+            - left: 80%
+            - top: 30%
+            - type: state-icon
+            - name: Bedroom
+            - group1: media_player.kitchen
+            - group1Name: Kitchen
+        - type: custom:decluttering-card
+          template: floorplan_media_player
+          variables:
+            - entity: media_player.kitchen
+            - left: 50%
+            - top: 30%
+            - type: state-icon
+            - name: Kitchen
+            - group1: media_player.bedroom
+            - group1Name: Bedroom
+
+        - type: custom:decluttering-card
+          template: floorplan_heating
+          variables:
+            - sensor: sensor.bedroom_heat
+            - climate: climate.bedroom
+            - left: 73%
+            - top: 24%
+            - name: Bedroom
+
+        - type: custom:decluttering-card
+          template: floorplan_heating
+          variables:
+            - sensor: sensor.sitting_room_heat
+            - climate: climate.living_room
+            - left: 35%
+            - top: 24%
+            - name: Sitting Room
