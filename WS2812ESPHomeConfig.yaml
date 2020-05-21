@@ -1,0 +1,70 @@
+######## THIS IS THE FINAL CODE FOR INTEGRATING A WS2812B LED STIRP IN ESP HOME
+### THE FIRST HALF OF THIS WILL BE CREATED AUTOMATICALLY USING THE CONFIGURATOR
+
+esphome:
+  name: NAME                      ##### EDIT ME ####
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: "SSID"                    ##### EDIT ME ####
+  password: "PASSWORD"            ##### EDIT ME ####
+  manual_ip:
+  # Set this to the IP of the ESP
+    static_ip: 192.168.0.xxx      ##### EDIT ME ####
+  # Set this to the IP address of the router. Often ends with .1
+    gateway: 192.168.0.xxx        ##### EDIT ME ####
+  # The subnet of the network. 255.255.255.0 works for most home networks.
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Fallback Hotspot"
+    password: "n9r33gZaFHe9"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+### THIS IS ALL THE ADDED BITS
+
+light:
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: D4
+    num_leds: 60
+    rgb_order: GRB
+    name: "Cave LED"
+    effects:
+      - random:
+      - flicker:
+          name: Flicker Effect With Custom Values
+          alpha: 95%
+          intensity: 1.5%
+      - addressable_rainbow:
+          name: Rainbow Effect With Custom Values
+          speed: 10
+          width: 50
+      - addressable_color_wipe:
+          name: Color Wipe Effect With Custom Values
+          colors:
+            - red: 100%
+              green: 0%
+              blue: 100%
+              num_leds: 1
+            - red: 94%
+              green: 45%
+              blue: 100%
+              num_leds: 1
+          add_led_interval: 100ms
+          reverse: False
+      - addressable_scan:
+          name: Scan Effect With Custom Values
+          move_interval: 100ms
+          scan_width: 1
