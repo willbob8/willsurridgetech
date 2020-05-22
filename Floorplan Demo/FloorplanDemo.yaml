@@ -163,10 +163,10 @@ decluttering_templates:
                   entities:
                     - entity_id: '[[group1]]'
                       name: '[[group1Name]]'
-                shortcuts:
+                shortcuts:         ### You can edit these to any playlist of source you wish
                   columns: 4 # Max buttons per row
                   buttons:
-                    - icon: mdi:pine-tree
+                    - icon: mdi:pine-tree           
                       type: playlist
                       id: spotify:user:spotify:playlist:37i9dQZF1DX0Yxoavh5qJV
                     - icon: mdi:music-clef-treble
@@ -211,7 +211,7 @@ decluttering_templates:
       entity: '[[sensor]]'
       hold_action:
        action: none
-      image: /local/images/FloorplanDemo/RadOff.png
+      image: /local/images/FloorplanDemo/RadOff.png 
       state_image:
         "heating": /local/images/FloorplanDemo/RadOn.png
       style:
@@ -241,8 +241,8 @@ icon: mdi:floor-plan
 path: floorplanDemo
 panel: true
 cards:
-  - type: "custom:config-template-card"
-    entities:
+  - type: "custom:config-template-card"  
+    entities:                             ### List all the light entities here that you plan on using
       - light.sitting_left_orb
       - light.sitting_room_main
       - light.bedroom_light
