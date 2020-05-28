@@ -1,0 +1,381 @@
+### Add this to your configuration file, changing the host IP to the IP of your router
+
+device_tracker:
+  - platform: nmap_tracker
+    hosts: 192.168.0.1/24
+
+### Make sure you have these resources downloaded from the HACS store and listed in your lovelace
+resources:
+  - url: /hacsfiles/lovelace-layout-card/layout-card.js
+    type: module
+  - url: /hacsfiles/button-card/button-card.js
+    type: module
+  - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+    type: module
+
+
+### This is the template which will apply to all our entities
+button_card_templates:
+  network_status:
+    styles:
+      img_cell:
+        - border-radius: 100%
+        - width: 50px
+        - height: 50px
+      card:
+        - background-color: rgba(0, 0, 0, 0)
+        - box-shadow: none
+        - max-width: 100px
+      name:
+        - color: white
+        - align-self: middle
+        - white-space: pre-line
+        - word-wrap: break-word
+        - font-weight: bold
+      icon:
+        - width: 60%
+      label:
+        - font-size: 70%
+        - background-color: rgba(0, 0, 0, 0.1)
+    state:
+      - value: 'home'
+        color: "#79EF70"
+        styles:
+          img_cell:
+            - box-shadow: rgba(0, 0, 0, 0.39) 0px 0px 5px 0px
+            - background-color: '#d6d6d6'
+      - value: 'not_home'
+        color: "#D84B4B"
+        styles:
+          img_cell:
+            - box-shadow: inset rgba(0, 0, 0, 0.39) 0px 0px 5px 0px
+            - background-color: '#CCCCCC'
+
+### And here is the main lovelave configuration for the network status!
+### You will need to change the images and the entities to work with your setup.
+icon: mdi:lan
+path: network
+panel: true
+cards:
+  - type: vertical-stack
+    cards:
+      - type: custom:layout-card
+        layout: vertical
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: picture-elements
+                image: /local/images/alexa.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.kitchen_show
+                    style:
+                      left: 20%
+                      top: 30%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.bedroom_spot
+                    style:
+                      left: 50%
+                      top: 30%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.sitting_room_dot
+                    style:
+                      left: 80%
+                      top: 30%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.cave_dot
+                    style:
+                      left: 35%
+                      top: 80%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.google_mini
+                    style:
+                      left: 65%
+                      top: 80%
+
+              - type: picture-elements
+                image: /local/images/sonos.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.kitchen_sonos
+                    style:
+                      left: 25%
+                      top: 30%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.bedroom_sonos
+                    style:
+                      left: 75%
+                      top: 30%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.dining_room_sonos
+                    style:
+                      left: 25%
+                      top: 75%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.sitting_room_sonos
+                    style:
+                      left: 75%
+                      top: 75%
+
+              - type: picture-elements
+                image: /local/images/movie.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.philips_tv
+                    style:
+                      left: 30%
+                      top: 50%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.broadlinkrmpro
+                    style:
+                      left: 70%
+                      top: 55%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.xbox_360
+                    style:
+                      left: 70%
+                      top: 50%
+
+              - type: picture-elements
+                image: /local/images/power.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.cave_desk
+                    style:
+                      left: 25%
+                      top: 50%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.festoon_plug
+                    style:
+                      left: 50%
+                      top: 50%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.heater_plug
+                    style:
+                      left: 75%
+                      top: 50%
+
+          - break
+          - type: vertical-stack
+            cards:
+              - type: picture-elements
+                image: /local/images/internet.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.cow
+                    style:
+                      left: 30%
+                      top: 50%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.evohome_gateway
+                    style:
+                      left: 70%
+                      top: 50%
+
+              - type: picture-elements
+                image: /local/images/lighting.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.philips_hue
+                    style:
+                      left: 20%
+                      top: 30%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.kitchen_counter_led
+                    style:
+                      left: 50%
+                      top: 30%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.rightkallaxled
+                    style:
+                      left: 80%
+                      top: 33%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.leftkallaxled
+                    style:
+                      left: 35%
+                      top: 70%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.cave_led
+                    style:
+                      left: 65%
+                      top: 70%
+
+              - type: picture-elements
+                image: /local/images/cctv.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.front_door_cam
+                    style:
+                      left: 30%
+                      top: 50%
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.dining_cam
+                    style:
+                      left: 70%
+                      top: 50%
+
+              - type: picture-elements
+                image: /local/images/personal.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.wills_mbp
+                    style:
+                      left: 20%
+                      top: 25%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.wills_iphone
+                    style:
+                      left: 50%
+                      top: 25%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.wills_ipad
+                    style:
+                      left: 80%
+                      top: 25%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.florries_mba
+                    style:
+                      left: 20%
+                      top: 70%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.florries_iphone
+                    style:
+                      left: 50%
+                      top: 75%
+                  - type: custom:button-card
+                    template: network_status
+                    entity: device_tracker.florries_kindle
+                    style:
+                      left: 80%
+                      top: 75%
+
+
+          - break
+          - type: vertical-stack
+            cards:
+
+              - type: picture-elements
+                image: /local/images/cctv.jpg
+                elements:
+                  - type: custom:button-card
+                    template: network_status
+                    entity:  device_tracker.cave
+                    style:
+                      left: 50%
+                      top: 50%
+
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.christmas_decorations
+                    state: "on"
+                card:
+                  type: picture-elements
+                  image: /local/images/christmas.jpg
+                  elements:
+                    - type: custom:button-card
+                      template: network_status
+                      entity:  device_tracker.christmas_tree
+                      style:
+                        left: 30%
+                        top: 30%
+                    - type: custom:button-card
+                      template: network_status
+                      entity:  device_tracker.small_tree_plug
+                      style:
+                        left: 70%
+                        top: 30%
+                    - type: custom:button-card
+                      template: network_status
+                      entity:  device_tracker.mantle_plug
+                      style:
+                        left: 30%
+                        top: 75%
+                    - type: custom:button-card
+                      template: network_status
+                      entity:  device_tracker.snow_plug
+                      style:
+                        left: 70%
+                        top: 75%
+
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mini-graph-card
+                    decimals: 1
+                    entities:
+                      - entity: sensor.memory_use_percent
+                        name: Memory
+                        hours_to_show: 168
+                        points_per_hour: 0.25
+                        color: blue
+                  - type: custom:mini-graph-card
+                    decimals: 1
+                    entities:
+                      - entity: sensor.processor_use
+                        name: Processor
+                        hours_to_show: 168
+                        points_per_hour: 0.25
+                        color: green
+                  - type: custom:mini-graph-card
+                    decimals: 1
+                    entities:
+                      - entity: sensor.disk_use_percent_home
+                        name: Disk
+                        hours_to_show: 168
+                        points_per_hour: 0.25
+                        color: orange
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mini-graph-card
+                    decimals: 1
+                    entities:
+                      - entity: sensor.speedtest_upload
+                        name: Upload
+                        hours_to_show: 168
+                        points_per_hour: 0.25
+                        color: blue
+                  - type: custom:mini-graph-card
+                    decimals: 1
+                    entities:
+                      - entity: sensor.speedtest_download
+                        name: Download
+                        hours_to_show: 168
+                        points_per_hour: 0.25
+                        color: green
+                  - type: custom:mini-graph-card
+                    decimals: 1
+                    entities:
+                      - entity: sensor.speedtest_ping
+                        name: Ping
+                        hours_to_show: 168
+                        points_per_hour: 0.25
+                        color: orange
