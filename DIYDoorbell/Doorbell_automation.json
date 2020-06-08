@@ -1,0 +1,125 @@
+[
+    {
+        "id": "7f0f44e3.2e0e9c",
+        "type": "server-state-changed",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.doorbell",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 199,
+        "y": 1466,
+        "wires": [
+            [
+                "b4b7260.dc6d2d8",
+                "1dca3222.e55e2e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "73c4e48d.76c22c",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "tts",
+        "service": "google_translate_say",
+        "entityId": "media_player.spare_room_mini",
+        "data": "{\"message\":\"Ding Dong, there's someone at the door!\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 908,
+        "y": 1407,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1dca3222.e55e2e",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "ios_will_surridges_iphone",
+        "entityId": "",
+        "data": "{\"message\":\"Ding Dong, there's someone at the door!\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 756,
+        "y": 1582,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b4b7260.dc6d2d8",
+        "type": "api-current-state",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "switch.doorbell_sound",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 545,
+        "y": 1417,
+        "wires": [
+            [
+                "73c4e48d.76c22c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a28759b3.590c58",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    }
+]

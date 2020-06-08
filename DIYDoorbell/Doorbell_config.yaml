@@ -1,0 +1,40 @@
+esphome:
+  name: doorbell
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: "SSID"
+  password: "PASSWORD"
+  manual_ip:
+  # Set this to the IP of the ESP
+    static_ip: 192.168.0.123
+  # Set this to the IP address of the router. Often ends with .1
+    gateway: 192.168.0.1
+  # The subnet of the network. 255.255.255.0 works for most home networks.
+    subnet: 255.255.255.0
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Doorbell Fallback Hotspot"
+    password: "HIAKHj3KwQir"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: D8
+      mode: INPUT_PULLDOWN_16
+    name: "Doorbell"
+
+switch:
+  - platform: gpio
+    pin: D4
+    name: "Doorbell Sound"
