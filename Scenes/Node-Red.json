@@ -1,0 +1,675 @@
+[
+    {
+        "id": "9bd9415.e9829c",
+        "type": "comment",
+        "z": "f6450d10.79a08",
+        "name": "Dinner Scene",
+        "info": "",
+        "x": 170,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "83a8a2e9.a6fd1",
+        "type": "server-state-changed",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.dinner_scene",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 216,
+        "y": 1627,
+        "wires": [
+            [
+                "525f2cf9.cf0594",
+                "a0a26a1f.aa36f8",
+                "e0445ebf.28878",
+                "76355b39.769174",
+                "11ab0116.5ba5bf"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "525f2cf9.cf0594",
+        "type": "delay",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 590,
+        "y": 1622,
+        "wires": [
+            [
+                "6b1f32b0.0c345c"
+            ]
+        ]
+    },
+    {
+        "id": "6b1f32b0.0c345c",
+        "type": "api-call-service",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_off",
+        "entityId": "input_boolean.dinner_scene",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 813,
+        "y": 1622,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a0a26a1f.aa36f8",
+        "type": "hue-scene",
+        "z": "f6450d10.79a08",
+        "name": "Dinner",
+        "bridge": "656f4",
+        "sceneid": "b8Bkl2dH7x-w-mW",
+        "x": 580,
+        "y": 1691,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e0445ebf.28878",
+        "type": "api-call-service",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.left_kallax_led, light.right_kallax_led",
+        "data": "{\"brightness\":255,\"rgb_color\":[255,0,255]}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 620,
+        "y": 1758,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "11ab0116.5ba5bf",
+        "type": "sonos-universal",
+        "z": "f6450d10.79a08",
+        "confignode": "5e6a2e42.2ed72",
+        "compatibilityMode": false,
+        "command": "player.leave.group",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 541,
+        "y": 1824,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e14d0887.5e4918",
+        "type": "sonos-universal",
+        "z": "f6450d10.79a08",
+        "confignode": "1a8e7ceb.55f933",
+        "compatibilityMode": false,
+        "command": "group.play.queue",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 715,
+        "y": 2086,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b0e45f8.c55a0a",
+        "type": "sonos-universal",
+        "z": "f6450d10.79a08",
+        "confignode": "1a8e7ceb.55f933",
+        "compatibilityMode": false,
+        "command": "player.set.volume",
+        "state": "10",
+        "stateType": "str",
+        "name": "",
+        "x": 586,
+        "y": 1940,
+        "wires": [
+            [
+                "afc40fa6.4e9bc"
+            ]
+        ]
+    },
+    {
+        "id": "76355b39.769174",
+        "type": "sonos-universal",
+        "z": "f6450d10.79a08",
+        "confignode": "1a8e7ceb.55f933",
+        "compatibilityMode": false,
+        "command": "player.leave.group",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 490,
+        "y": 1885,
+        "wires": [
+            [
+                "b0e45f8.c55a0a"
+            ]
+        ]
+    },
+    {
+        "id": "afc40fa6.4e9bc",
+        "type": "sonos-universal",
+        "z": "f6450d10.79a08",
+        "confignode": "1a8e7ceb.55f933",
+        "compatibilityMode": false,
+        "command": "group.clear.queue",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 620,
+        "y": 1993,
+        "wires": [
+            [
+                "8ba726a5.2096a8"
+            ]
+        ]
+    },
+    {
+        "id": "8ba726a5.2096a8",
+        "type": "sonos-manage-mysonos",
+        "z": "f6450d10.79a08",
+        "confignode": "1a8e7ceb.55f933",
+        "compatibilityMode": false,
+        "command": "mysonos.queue.item",
+        "state": "Evening jazz and some wine",
+        "stateType": "str",
+        "name": "",
+        "x": 684,
+        "y": 2042,
+        "wires": [
+            [
+                "e14d0887.5e4918"
+            ]
+        ]
+    },
+    {
+        "id": "11418144.8058ef",
+        "type": "comment",
+        "z": "f6450d10.79a08",
+        "name": "Main lights",
+        "info": "",
+        "x": 811,
+        "y": 1690,
+        "wires": []
+    },
+    {
+        "id": "47fa407d.e8f85",
+        "type": "comment",
+        "z": "f6450d10.79a08",
+        "name": "LED strips",
+        "info": "",
+        "x": 816,
+        "y": 1755,
+        "wires": []
+    },
+    {
+        "id": "8ff55a37.49ddf8",
+        "type": "comment",
+        "z": "f6450d10.79a08",
+        "name": "Kitchen Sonos",
+        "info": "",
+        "x": 828,
+        "y": 1821,
+        "wires": []
+    },
+    {
+        "id": "e4f1b97f.602a98",
+        "type": "comment",
+        "z": "f6450d10.79a08",
+        "name": "Dining Room Sonos",
+        "info": "",
+        "x": 841,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "ffb85515.395e88",
+        "type": "comment",
+        "z": "f6450d10.79a08",
+        "name": "Film Scene",
+        "info": "",
+        "x": 143,
+        "y": 2197,
+        "wires": []
+    },
+    {
+        "id": "def674c5.e47438",
+        "type": "server-state-changed",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.film_scene",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 238,
+        "y": 2250,
+        "wires": [
+            [
+                "353be0bc.242eb",
+                "1e6d47b0.d35cb8",
+                "ad88097e.cdddb8",
+                "1ac83f0e.2002d1",
+                "80cf8692.b2c238",
+                "bd08baa.7257748",
+                "1cd2b82c.43dff8",
+                "60c9c1d6.46319",
+                "52c54128.87e7a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "877cfff1.795f4",
+        "type": "api-call-service",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_off",
+        "entityId": "input_boolean.film_scene",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 776,
+        "y": 2243,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fb7a5745.e666c8",
+        "type": "api-call-service",
+        "z": "f6450d10.79a08",
+        "name": "Hall Off",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.hallway",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 816,
+        "y": 2302,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3a52208d.6f19e",
+        "type": "api-call-service",
+        "z": "f6450d10.79a08",
+        "name": "Dining Off",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.dining_room",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 831,
+        "y": 2356,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "52c54128.87e7a",
+        "type": "api-call-service",
+        "z": "f6450d10.79a08",
+        "name": "Kitchen LED",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.counter_led",
+        "data": "{\"brightness\":255,\"rgb_color\":[255,198,72]}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 701,
+        "y": 2425,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "353be0bc.242eb",
+        "type": "delay",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 535,
+        "y": 2247,
+        "wires": [
+            [
+                "877cfff1.795f4"
+            ]
+        ]
+    },
+    {
+        "id": "1e6d47b0.d35cb8",
+        "type": "delay",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "4",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 677,
+        "y": 2303,
+        "wires": [
+            [
+                "fb7a5745.e666c8"
+            ]
+        ]
+    },
+    {
+        "id": "ad88097e.cdddb8",
+        "type": "delay",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 679,
+        "y": 2360,
+        "wires": [
+            [
+                "3a52208d.6f19e"
+            ]
+        ]
+    },
+    {
+        "id": "1ac83f0e.2002d1",
+        "type": "hue-scene",
+        "z": "f6450d10.79a08",
+        "name": "Film",
+        "bridge": "656f4af0.b4aaf4",
+        "sceneid": "8yfI8zlIVUZ3U0C",
+        "groupid": "2",
+        "skipevents": false,
+        "x": 686,
+        "y": 2477,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "80cf8692.b2c238",
+        "type": "sonos-universal",
+        "z": "f6450d10.79a08",
+        "confignode": "1a8e7ceb.55f933",
+        "compatibilityMode": false,
+        "command": "group.pause",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 672,
+        "y": 2539,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bd08baa.7257748",
+        "type": "sonos-universal",
+        "z": "f6450d10.79a08",
+        "confignode": "5e6a2e42.2ed72",
+        "compatibilityMode": false,
+        "command": "group.pause",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 660,
+        "y": 2588,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1cd2b82c.43dff8",
+        "type": "api-current-state",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "climate.living_room",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 566,
+        "y": 2638,
+        "wires": [
+            [
+                "53ae9c0d.d5b9f4"
+            ]
+        ]
+    },
+    {
+        "id": "53ae9c0d.d5b9f4",
+        "type": "switch",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gte",
+                "v": "17",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 690,
+        "y": 2690,
+        "wires": [
+            [
+                "d17075f4.9d8488"
+            ]
+        ]
+    },
+    {
+        "id": "d17075f4.9d8488",
+        "type": "api-call-service",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.living_room",
+        "data": "{\"temperature\":21}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 919,
+        "y": 2684,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "60c9c1d6.46319",
+        "type": "api-call-service",
+        "z": "f6450d10.79a08",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "media_player",
+        "service": "turn_on",
+        "entityId": "media_player.tv",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 548,
+        "y": 2728,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a28759b3.590c58",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    },
+    {
+        "id": "656f4af0.b4aaf4",
+        "type": "hue-bridge",
+        "z": "",
+        "name": "Philips hue",
+        "bridge": "192.168.0.121",
+        "key": "x",
+        "interval": "3000"
+    },
+    {
+        "id": "5e6a2e42.2ed72",
+        "type": "sonos-config",
+        "z": "",
+        "name": "Kitchen",
+        "serialnum": "34",
+        "ipaddress": "192.168.0.115"
+    },
+    {
+        "id": "1a8e7ceb.55f933",
+        "type": "sonos-config",
+        "z": "",
+        "name": "Dining Room",
+        "serialnum": "78",
+        "ipaddress": "192.168.0.111"
+    }
+]

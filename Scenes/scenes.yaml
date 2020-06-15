@@ -1,0 +1,151 @@
+### BOOLEAN REQUIRED TO TRIGGER AUTOMATIONS ###
+
+input_boolean:
+  dinner_scene:
+    name: Dinner Scene
+    icon: mdi:silverware-fork-knife
+    initial: off
+
+  film_scene:
+    name: Film scene
+    icon: mdi:movie-open
+    initial: off
+
+### EXAMPLE SCENES ###
+
+scenes:
+  - id: '1591713854928'
+    name: Dinner - visual
+    entities:
+      light.dining_left_orb:
+        brightness: 174
+        color_temp: 454
+        custom_ui_state_card: state-card-custom-ui
+        friendly_name: Left orb
+        max_mireds: 454
+        min_mireds: 153
+        state: 'on'
+        supported_features: 43
+      light.dining_right_orb:
+        brightness: 176
+        color_temp: 454
+        custom_ui_state_card: state-card-custom-ui
+        friendly_name: Right orb
+        max_mireds: 454
+        min_mireds: 153
+        state: 'on'
+        supported_features: 43
+      light.dining_room_light:
+        brightness: 128
+        color_temp: 454
+        custom_ui_state_card: state-card-custom-ui
+        friendly_name: Dining room light
+        max_mireds: 454
+        min_mireds: 153
+        state: 'on'
+        supported_features: 43
+      light.left_kallax_led:
+        brightness: 255
+        custom_ui_state_card: state-card-custom-ui
+        effect_list:
+        - blue_fade
+        - blue_strobe
+        - colorjump
+        - colorloop
+        - colorstrobe
+        - cyan_fade
+        - cyan_strobe
+        - gb_cross_fade
+        - green_fade
+        - green_strobe
+        - purple_fade
+        - purple_strobe
+        - rb_cross_fade
+        - red_fade
+        - red_strobe
+        - rg_cross_fade
+        - white_fade
+        - white_strobe
+        - yellow_fade
+        - yellow_strobe
+        - random
+        friendly_name: Left_Kallax_LED
+        hs_color:
+        - 300
+        - 100
+        rgb_color:
+        - 255
+        - 0
+        - 255
+        state: 'on'
+        supported_features: 21
+        xy_color:
+        - 0.385
+        - 0.155
+      light.right_kallax_led:
+        brightness: 255
+        custom_ui_state_card: state-card-custom-ui
+        effect_list:
+        - blue_fade
+        - blue_strobe
+        - colorjump
+        - colorloop
+        - colorstrobe
+        - cyan_fade
+        - cyan_strobe
+        - gb_cross_fade
+        - green_fade
+        - green_strobe
+        - purple_fade
+        - purple_strobe
+        - rb_cross_fade
+        - red_fade
+        - red_strobe
+        - rg_cross_fade
+        - white_fade
+        - white_strobe
+        - yellow_fade
+        - yellow_strobe
+        - random
+        friendly_name: Right_Kallax_LED
+        hs_color:
+        - 300
+        - 100
+        rgb_color:
+        - 255
+        - 0
+        - 255
+        state: 'on'
+        supported_features: 21
+        xy_color:
+        - 0.385
+        - 0.155
+      media_player.dining_room:
+        custom_ui_state_card: state-card-custom-ui
+        friendly_name: Dining Room
+        is_volume_muted: false
+        shuffle: false
+        sonos_group:
+        - media_player.dining_room
+        source_list:
+        - BBC Radio 1
+        - BBC Radio 2
+        - Classic FM
+        state: playing
+        supported_features: 64063
+        volume_level: 0.09
+      media_player.kitchen:
+        custom_ui_state_card: state-card-custom-ui
+        friendly_name: Kitchen
+        is_volume_muted: false
+        media_content_type: music
+        shuffle: false
+        sonos_group:
+        - media_player.kitchen
+        source_list:
+        - BBC Radio 1
+        - BBC Radio 2
+        - Classic FM
+        state: idle
+        supported_features: 64063
+        volume_level: 0.24
