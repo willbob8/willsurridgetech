@@ -1,0 +1,39 @@
+sensor:
+  - platform: template
+    sensors:
+
+  ### TV Status ###
+      tv_status:
+        friendly_name: "TV Status"
+        value_template: >-
+          {% if states('sensor.tv_power')|float < 2 %}
+            off
+          {% elif states('sensor.tv_power')|float < 10 %}
+            standby
+          {% else %}
+            on
+          {% endif %}
+
+  ### TIME ###
+      end_time:
+        friendly_name: 'End Time'
+        value_template: "{{ (now().strftime('%s') | int + (float(states('input_number.hour_select'))*60*60)) | timestamp_custom('%H:%M') }}"
+
+  ### CONVERT TEMPERATURE OF ROOMS ###
+      bedroom_temperature:
+        friendly_name: 'Bedroom Temperature'
+        value_template: "{{ state_attr('climate.bedroom', 'current_temperature') }}"
+
+
+lock:
+  - platform: value_template
+    name: Garage Door
+    value_template: "{{ is_state('sensor.garagedoorsensor.state', 'on') }}"
+    lock:
+      service: switch.turn_on
+      data:
+        entity_id: switch.garagedoor_close
+    unlock:
+      service: switch.turn_on
+      data:
+        entity_id: switch.garagedoor_open
