@@ -1,0 +1,32 @@
+### CAMERA INTEGRATION ###
+
+- platform: generic
+  name: Dining Room
+  username: root
+  password: ismart12
+  authentication: basic
+  still_image_url: https://<yourCameraIPAddress>/cgi-bin/currentpic.cgi
+  stream_source: rtsp://<yourCameraIPAddress>:8554/unicast #comment this line out for still image only
+  framerate: 5
+  verify_ssl: false
+  scan_interval: 5
+
+
+### TERMINAL COMMANDS ###
+
+ssh root@<yourCameraIPAddress>
+ismart12
+
+cd ..
+cd system/sdcard/config
+ls
+# You should see a mqtt.conf.dist file
+cp mqtt.conf.dist mqtt.conf
+vi mqtt.conf
+# Press I to enter edit mode, and edit:
+## The user, pass, host for mqtt broker
+## Device name and location
+## Uncomment Autodiscovery
+## Change light sensor to hw
+# Press escape
+:wq
