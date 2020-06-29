@@ -1,0 +1,14 @@
+## Configuration
+
+sensor:
+  - platform: scrape
+    name: Bins
+    resource: https://www.herefordshire.gov.uk/environmental-protection/waste-management/refuse-household-bin-collection/?blpu_uprn=200002619824
+    select: "#altnextWasteDay"
+
+  - platform: scrape
+    name: Subs
+    resource: https://socialblade.com/youtube/channel/UCUHYuGhF4-ite6rulwWD5rw
+    select: "#youtube-stats-header-subs"
+    headers:
+      User-Agent: Mozilla/5.0
