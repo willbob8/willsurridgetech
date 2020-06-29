@@ -1,0 +1,253 @@
+## Configuration
+input_boolean:
+  guest_mode:
+    name: Guest Mode
+    icon: mdi:hotel
+
+## Lovelace
+
+- type: conditional
+  conditions:
+    - entity: input_boolean.guest_mode
+      state: "on"
+  card:
+    type: markdown
+    content: >
+      # Wifi Login
+    style: |
+      ha-card {
+        background-color: rgba(0, 0, 0, 0);
+        font-family: 'Open Sans', sans-serif;
+        font-size: 150%;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        text-align: center;
+      }
+      h1, h3 {
+        font-weight: 300 !important;
+      }
+- type: horizontal-stack
+  cards:
+    - type: custom:gap-card
+      size: 50
+      height: 350
+    - type: conditional
+      conditions:
+        - entity: input_boolean.guest_mode
+          state: "on"
+      card:
+        type: picture
+        image: /local/images/guest_wifi.png
+    - type: custom:gap-card
+      size: 50
+      height: 350
+
+### NODE RED HEATING FLOW ###
+
+[
+    {
+        "id": "b1f9554d.ed0cc8",
+        "type": "light-scheduler",
+        "z": "7c375c63.874d74",
+        "settings": "98a22206.84e2b",
+        "events": "[{\"start\":{\"dow\":1,\"mod\":1260},\"end\":{\"dow\":1,\"mod\":1320}},{\"start\":{\"dow\":2,\"mod\":1260},\"end\":{\"dow\":2,\"mod\":1320}},{\"start\":{\"dow\":3,\"mod\":1260},\"end\":{\"dow\":3,\"mod\":1320}},{\"start\":{\"dow\":4,\"mod\":1260},\"end\":{\"dow\":4,\"mod\":1320}},{\"start\":{\"dow\":5,\"mod\":1260},\"end\":{\"dow\":5,\"mod\":1320}},{\"start\":{\"dow\":6,\"mod\":1260},\"end\":{\"dow\":6,\"mod\":1320}},{\"start\":{\"dow\":0,\"mod\":1260},\"end\":{\"dow\":0,\"mod\":1320}}]",
+        "topic": "",
+        "name": "9-10",
+        "onPayload": "ON",
+        "onPayloadType": "str",
+        "offPayload": "OFF",
+        "offPayloadType": "str",
+        "onlyWhenDark": true,
+        "scheduleRndMax": 0,
+        "sunElevationThreshold": 6,
+        "sunShowElevationInStatus": false,
+        "outputfreq": "output.statechange.startup",
+        "x": 170,
+        "y": 1256,
+        "wires": [
+            [
+                "710ca46f.f20bfc"
+            ]
+        ]
+    },
+    {
+        "id": "9768e51b.b2b368",
+        "type": "api-current-state",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.guest_mode",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 551,
+        "y": 1250,
+        "wires": [
+            [
+                "8a0827d.c34cad8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8a0827d.c34cad8",
+        "type": "api-current-state",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "climate.spare_room",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 635,
+        "y": 1307,
+        "wires": [
+            [
+                "f51872f7.5dcc1"
+            ]
+        ]
+    },
+    {
+        "id": "f51872f7.5dcc1",
+        "type": "switch",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "17",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 759,
+        "y": 1359,
+        "wires": [
+            [
+                "d94f5e4a.1650e"
+            ]
+        ]
+    },
+    {
+        "id": "d94f5e4a.1650e",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.living_room",
+        "data": "{\"temperature\":21}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 983,
+        "y": 1359,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "710ca46f.f20bfc",
+        "type": "switch",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ON",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "OFF",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 297,
+        "y": 1255,
+        "wires": [
+            [
+                "9768e51b.b2b368"
+            ],
+            [
+                "36e3639e.f14b8c"
+            ]
+        ]
+    },
+    {
+        "id": "36e3639e.f14b8c",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.spare_room",
+        "data": "{\"temperature\":12}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 535,
+        "y": 1403,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "98a22206.84e2b",
+        "type": "light-scheduler-settings",
+        "z": "",
+        "name": "my settings",
+        "latitude": "27.890814",
+        "longitude": "-82.50234640000001"
+    },
+    {
+        "id": "a28759b3.590c58",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    }
+]
