@@ -1,0 +1,921 @@
+[
+    {
+        "id": "4ab6772c.3cc998",
+        "type": "server-state-changed",
+        "z": "7c375c63.874d74",
+        "name": "Boost go",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.heating_boost",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 125,
+        "y": 2681,
+        "wires": [
+            [
+                "62396af8.357f34",
+                "bf95847.e0aa278",
+                "36ffd67d.cd910a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "62396af8.357f34",
+        "type": "api-current-state",
+        "z": "7c375c63.874d74",
+        "name": "Room",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_select.heating_room",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 335,
+        "y": 2656,
+        "wires": [
+            [
+                "7ea0742f.42447c"
+            ]
+        ]
+    },
+    {
+        "id": "bf95847.e0aa278",
+        "type": "api-current-state",
+        "z": "7c375c63.874d74",
+        "name": "Delay",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_number.hour_select",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 336,
+        "y": 2710,
+        "wires": [
+            [
+                "7ea0742f.42447c"
+            ]
+        ]
+    },
+    {
+        "id": "7ea0742f.42447c",
+        "type": "merge",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "timeout": "",
+        "x": 519,
+        "y": 2679,
+        "wires": [
+            [
+                "e78c0d25.c2abe"
+            ]
+        ]
+    },
+    {
+        "id": "e78c0d25.c2abe",
+        "type": "switch",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "property": "payload[0].payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Living Room",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Dining Room",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Hall",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Cave",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Bedroom",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Spare Room",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 6,
+        "x": 663,
+        "y": 2682,
+        "wires": [
+            [
+                "fd096104.63e9c"
+            ],
+            [
+                "e932b3c9.6d32e"
+            ],
+            [
+                "f281f5bb.f00548"
+            ],
+            [
+                "caaeb4a7.3a5348"
+            ],
+            [
+                "2cf7aa4a.4c3656"
+            ],
+            [
+                "abf5ab15.5aa588"
+            ]
+        ]
+    },
+    {
+        "id": "caaeb4a7.3a5348",
+        "type": "change",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "payload[1].payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 830,
+        "y": 2700,
+        "wires": [
+            [
+                "43e98255.45e89c"
+            ]
+        ]
+    },
+    {
+        "id": "43e98255.45e89c",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Cave 21",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.cave",
+        "data": "{\"temperature\":21}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1006,
+        "y": 2700,
+        "wires": [
+            [
+                "62dc8f05.0a4fc"
+            ]
+        ]
+    },
+    {
+        "id": "62dc8f05.0a4fc",
+        "type": "calculator",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "inputMsgField": "delay",
+        "outputMsgField": "delay",
+        "operation": "mult",
+        "constant": "3600000",
+        "x": 1153,
+        "y": 2699,
+        "wires": [
+            [
+                "ffce07bd.f666c8"
+            ]
+        ]
+    },
+    {
+        "id": "ffce07bd.f666c8",
+        "type": "delay",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "pauseType": "delayv",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1298,
+        "y": 2697,
+        "wires": [
+            [
+                "2306497d.061896"
+            ]
+        ]
+    },
+    {
+        "id": "2306497d.061896",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Reset",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "evohome",
+        "service": "clear_zone_override",
+        "entityId": "climate.cave",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1434,
+        "y": 2698,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "36ffd67d.cd910a",
+        "type": "delay",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 326,
+        "y": 2762,
+        "wires": [
+            [
+                "8e992a93.ea2238"
+            ]
+        ]
+    },
+    {
+        "id": "8e992a93.ea2238",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_off",
+        "entityId": "input_boolean.heating_boost",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 528,
+        "y": 2761,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2cf7aa4a.4c3656",
+        "type": "change",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "payload[1].payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 832,
+        "y": 2750,
+        "wires": [
+            [
+                "d7d4929e.240f6"
+            ]
+        ]
+    },
+    {
+        "id": "d7d4929e.240f6",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Bed 21",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.bedroom",
+        "data": "{\"temperature\":21}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1008,
+        "y": 2750,
+        "wires": [
+            [
+                "c256def.002bc2"
+            ]
+        ]
+    },
+    {
+        "id": "c256def.002bc2",
+        "type": "calculator",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "inputMsgField": "delay",
+        "outputMsgField": "delay",
+        "operation": "mult",
+        "constant": "3600000",
+        "x": 1155,
+        "y": 2749,
+        "wires": [
+            [
+                "f5f4045c.153998"
+            ]
+        ]
+    },
+    {
+        "id": "f5f4045c.153998",
+        "type": "delay",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "pauseType": "delayv",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1300,
+        "y": 2747,
+        "wires": [
+            [
+                "d482f25a.d34b8"
+            ]
+        ]
+    },
+    {
+        "id": "d482f25a.d34b8",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Reset",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "evohome",
+        "service": "clear_zone_override",
+        "entityId": "climate.bedroom",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1436,
+        "y": 2748,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "abf5ab15.5aa588",
+        "type": "change",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "payload[1].payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 828,
+        "y": 2797,
+        "wires": [
+            [
+                "2cedcea8.086322"
+            ]
+        ]
+    },
+    {
+        "id": "2cedcea8.086322",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Spare 21",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.spare_room",
+        "data": "{\"temperature\":21}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1004,
+        "y": 2797,
+        "wires": [
+            [
+                "26833744.0f9fa8"
+            ]
+        ]
+    },
+    {
+        "id": "26833744.0f9fa8",
+        "type": "calculator",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "inputMsgField": "delay",
+        "outputMsgField": "delay",
+        "operation": "mult",
+        "constant": "3600000",
+        "x": 1151,
+        "y": 2796,
+        "wires": [
+            [
+                "cf72d58a.68dfc8"
+            ]
+        ]
+    },
+    {
+        "id": "cf72d58a.68dfc8",
+        "type": "delay",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "pauseType": "delayv",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1296,
+        "y": 2794,
+        "wires": [
+            [
+                "e0027414.07c1a8"
+            ]
+        ]
+    },
+    {
+        "id": "e0027414.07c1a8",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Reset",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "evohome",
+        "service": "clear_zone_override",
+        "entityId": "climate.spare_room",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1432,
+        "y": 2795,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f281f5bb.f00548",
+        "type": "change",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "payload[1].payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 832,
+        "y": 2655,
+        "wires": [
+            [
+                "566be28a.7a68cc"
+            ]
+        ]
+    },
+    {
+        "id": "566be28a.7a68cc",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Hall 21",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.hall",
+        "data": "{\"temperature\":21}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 998,
+        "y": 2655,
+        "wires": [
+            [
+                "8b198460.5c6888"
+            ]
+        ]
+    },
+    {
+        "id": "8b198460.5c6888",
+        "type": "calculator",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "inputMsgField": "delay",
+        "outputMsgField": "delay",
+        "operation": "mult",
+        "constant": "3600000",
+        "x": 1155,
+        "y": 2654,
+        "wires": [
+            [
+                "a83ac0ea.e9568"
+            ]
+        ]
+    },
+    {
+        "id": "a83ac0ea.e9568",
+        "type": "delay",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "pauseType": "delayv",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1300,
+        "y": 2652,
+        "wires": [
+            [
+                "a5a3470d.5a80b8"
+            ]
+        ]
+    },
+    {
+        "id": "a5a3470d.5a80b8",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Reset",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "evohome",
+        "service": "clear_zone_override",
+        "entityId": "climate.hall",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1436,
+        "y": 2653,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e932b3c9.6d32e",
+        "type": "change",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "payload[1].payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 832,
+        "y": 2617,
+        "wires": [
+            [
+                "915549bb.f7e0c8"
+            ]
+        ]
+    },
+    {
+        "id": "915549bb.f7e0c8",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Dining 21",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.dining_room",
+        "data": "{\"temperature\":21}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1008,
+        "y": 2617,
+        "wires": [
+            [
+                "9f471fce.a26c3"
+            ]
+        ]
+    },
+    {
+        "id": "9f471fce.a26c3",
+        "type": "calculator",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "inputMsgField": "delay",
+        "outputMsgField": "delay",
+        "operation": "mult",
+        "constant": "3600000",
+        "x": 1155,
+        "y": 2616,
+        "wires": [
+            [
+                "6a7a66c9.65f4b8"
+            ]
+        ]
+    },
+    {
+        "id": "6a7a66c9.65f4b8",
+        "type": "delay",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "pauseType": "delayv",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1300,
+        "y": 2614,
+        "wires": [
+            [
+                "154341c1.e7413e"
+            ]
+        ]
+    },
+    {
+        "id": "154341c1.e7413e",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Reset",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "evohome",
+        "service": "clear_zone_override",
+        "entityId": "climate.dining_room",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1436,
+        "y": 2615,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fd096104.63e9c",
+        "type": "change",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "payload[1].payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 833,
+        "y": 2577,
+        "wires": [
+            [
+                "a20f3494.e8b158"
+            ]
+        ]
+    },
+    {
+        "id": "a20f3494.e8b158",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Sitting 21",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "climate",
+        "service": "set_temperature",
+        "entityId": "climate.living_room",
+        "data": "{\"temperature\":21}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1009,
+        "y": 2577,
+        "wires": [
+            [
+                "8e8fcba3.84d368"
+            ]
+        ]
+    },
+    {
+        "id": "8e8fcba3.84d368",
+        "type": "calculator",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "inputMsgField": "delay",
+        "outputMsgField": "delay",
+        "operation": "mult",
+        "constant": "3600000",
+        "x": 1156,
+        "y": 2576,
+        "wires": [
+            [
+                "5c5554e2.4f260c"
+            ]
+        ]
+    },
+    {
+        "id": "5c5554e2.4f260c",
+        "type": "delay",
+        "z": "7c375c63.874d74",
+        "name": "",
+        "pauseType": "delayv",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1301,
+        "y": 2574,
+        "wires": [
+            [
+                "8cb05ebd.48a0a"
+            ]
+        ]
+    },
+    {
+        "id": "8cb05ebd.48a0a",
+        "type": "api-call-service",
+        "z": "7c375c63.874d74",
+        "name": "Reset",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "evohome",
+        "service": "clear_zone_override",
+        "entityId": "climate.living_room",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1437,
+        "y": 2575,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a28759b3.590c58",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    }
+]
