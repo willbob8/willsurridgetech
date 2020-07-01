@@ -1,0 +1,46 @@
+## Configuration.yaml
+
+sensor:
+  - platform: template
+    sensors:
+      end_time:
+        friendly_name: "End Time"
+        value_template: "{{ (now().strftime('%s') | int + (float(states('input_number.hour_select'))*60*60)) | timestamp_custom('%H:%M') }}"
+        
+input_boolean:
+  heating_boost:
+    name: Boost
+    initial: off
+    icon: mdi:radiator
+    
+input_number:
+  hour_select:
+  name: Hour
+  initial: 0
+  min: 0
+  max: 5
+  step: 0.25
+
+input_select:
+  heating_room:
+    name: Room
+    options:
+    - Living Room
+    - Dining Room
+    - Cave
+    - Bedroom
+    - Spare Room
+    - Hall
+    initial: Dining Room
+    icon: mdi:radiator
+    
+ ## Sample Lovelace
+ 
+- type: entities
+title: Heating Boost
+show_header_toggle: false
+entities:
+  - input_boolean.heating_boost
+  - sensor.end_time
+  - input_select.heating_room
+  - input_number.hour_select
