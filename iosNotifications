@@ -1,0 +1,683 @@
+[
+    {
+        "id": "51b3b203.77a4fc",
+        "type": "server-state-changed",
+        "z": "90731cdb.5be3c",
+        "name": "Trigger Scene",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "sensor.starling_effective_balance",
+        "entityidfiltertype": "exact",
+        "outputinitially": true,
+        "state_type": "num",
+        "haltifstate": "30",
+        "halt_if_type": "num",
+        "halt_if_compare": "lt",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 145.77774047851562,
+        "y": 76.5555419921875,
+        "wires": [
+            [
+                "8cf8088c.2ee528"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a619b06b.07141",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Low Balance Away",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "ios_will_surridges_iphone",
+        "entityId": "",
+        "data": "{\"message\":\"Your Bank Balance is low\",\"data\":{\"push\":{\"category\":\"LOWBALANCEAWAY\"}}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 616.7778205871582,
+        "y": 144.7777862548828,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "20a49995.693be6",
+        "type": "change",
+        "z": "90731cdb.5be3c",
+        "name": "false",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 805.8636474609375,
+        "y": 303.72711181640625,
+        "wires": [
+            [
+                "f89b0f40.ba112"
+            ]
+        ]
+    },
+    {
+        "id": "13367ff0.cc174",
+        "type": "inject",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 157,
+        "y": 137,
+        "wires": [
+            [
+                "8cf8088c.2ee528"
+            ]
+        ]
+    },
+    {
+        "id": "acb8dc6f.89a97",
+        "type": "switch",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "property": "payload.event.actionName",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "SNOOZE",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "IGNORE",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "REMIND_HOME",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 442,
+        "y": 239,
+        "wires": [
+            [
+                "5f0812c5.35e58c"
+            ],
+            [],
+            [
+                "53ad05fd.8418ec"
+            ]
+        ]
+    },
+    {
+        "id": "5f0812c5.35e58c",
+        "type": "trigger",
+        "z": "90731cdb.5be3c",
+        "op1": "",
+        "op2": "on",
+        "op1type": "nul",
+        "op2type": "str",
+        "duration": "5",
+        "extend": false,
+        "units": "min",
+        "reset": "off",
+        "bytopic": "all",
+        "name": "",
+        "x": 594.9999694824219,
+        "y": 202.9999008178711,
+        "wires": [
+            [
+                "cd01b06d.a1522"
+            ]
+        ]
+    },
+    {
+        "id": "53ad05fd.8418ec",
+        "type": "hold",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "x": 670,
+        "y": 271,
+        "wires": [
+            [
+                "20a49995.693be6"
+            ]
+        ]
+    },
+    {
+        "id": "db01709f.49605",
+        "type": "change",
+        "z": "90731cdb.5be3c",
+        "name": "trigger",
+        "rules": [
+            {
+                "t": "set",
+                "p": "trigger",
+                "pt": "msg",
+                "to": "true",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 503.7777862548828,
+        "y": 316.3333396911621,
+        "wires": [
+            [
+                "53ad05fd.8418ec"
+            ]
+        ]
+    },
+    {
+        "id": "5a3bdcd9.34be54",
+        "type": "server-events",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "event_type": "ios.notification_action_fired",
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "x": 156.22222900390625,
+        "y": 204.22221755981445,
+        "wires": [
+            [
+                "eb9ab67c.7019f8"
+            ]
+        ]
+    },
+    {
+        "id": "34faabc5.e8b454",
+        "type": "server-state-changed",
+        "z": "90731cdb.5be3c",
+        "name": "Will Home",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.will_home",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 348.11112213134766,
+        "y": 331.11107063293457,
+        "wires": [
+            [
+                "db01709f.49605"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "eb9ab67c.7019f8",
+        "type": "switch",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "property": "payload.event.categoryName",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "LOWBALANCR",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "LOWBALANCEHOME",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 304.2222213745117,
+        "y": 256.5555534362793,
+        "wires": [
+            [
+                "acb8dc6f.89a97"
+            ],
+            [
+                "acb8dc6f.89a97"
+            ]
+        ]
+    },
+    {
+        "id": "f89b0f40.ba112",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Low Balance Home",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "ios_will_surridges_iphone",
+        "entityId": "",
+        "data": "{\"message\":\"Your Bank Balance is low\",\"data\":{\"push\":{\"category\":\"LOWBALANCEHOME\"}}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 974.4444580078125,
+        "y": 277.77777099609375,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8cf8088c.2ee528",
+        "type": "api-current-state",
+        "z": "90731cdb.5be3c",
+        "name": "Will Home",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.will_home",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 327.7777786254883,
+        "y": 127.77776527404785,
+        "wires": [
+            [
+                "97e2f15b.82c7c"
+            ],
+            [
+                "a619b06b.07141"
+            ]
+        ]
+    },
+    {
+        "id": "97e2f15b.82c7c",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Low Balance Home",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "ios_will_surridges_iphone",
+        "entityId": "",
+        "data": "{\"message\":\"Your Bank Balance is low\",\"data\":{\"push\":{\"category\":\"LOWBALANCEHOME\"}}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 612.22216796875,
+        "y": 101.1111068725586,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d788f179.0ee23",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Low Balance Home",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "ios_will_surridges_iphone",
+        "entityId": "",
+        "data": "{\"message\":\"Your Bank Balance is low\",\"data\":{\"push\":{\"category\":\"LOWBALANCEHOME\"}}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 1068.8887939453125,
+        "y": 177.77777099609375,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2c3e152b.60be8a",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Low Balance Away",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "ios_will_surridges_iphone",
+        "entityId": "",
+        "data": "{\"message\":\"Your Bank Balance is low\",\"data\":{\"push\":{\"category\":\"LOWBALANCEAWAY\"}}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1073.4444465637207,
+        "y": 221.44445037841797,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cd01b06d.a1522",
+        "type": "api-current-state",
+        "z": "90731cdb.5be3c",
+        "name": "Will Home",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.will_home",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 784.4444046020508,
+        "y": 204.444429397583,
+        "wires": [
+            [
+                "d788f179.0ee23"
+            ],
+            [
+                "2c3e152b.60be8a"
+            ]
+        ]
+    },
+    {
+        "id": "fa520ab.3c07ff8",
+        "type": "comment",
+        "z": "90731cdb.5be3c",
+        "name": "Low Balance Notification",
+        "info": "",
+        "x": 148.88887786865234,
+        "y": 31.11111068725586,
+        "wires": []
+    },
+    {
+        "id": "761b7ea2.f01de",
+        "type": "comment",
+        "z": "90731cdb.5be3c",
+        "name": "Tesco Balance Notification",
+        "info": "",
+        "x": 161.1111068725586,
+        "y": 408.8888854980469,
+        "wires": []
+    },
+    {
+        "id": "c21c6857.303b18",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Balance",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "",
+        "service": "",
+        "entityId": "",
+        "data": "{\"message\":\"Your Bank Balance is £{{ entity.sensor.starling_effective_balance }} \"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 393.25395584106445,
+        "y": 469.52381324768066,
+        "wires": [
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "58b660da.990b3",
+        "type": "inject",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 164.44444274902344,
+        "y": 527.7777709960938,
+        "wires": [
+            [
+                "c21c6857.303b18"
+            ]
+        ]
+    },
+    {
+        "id": "547763a0.c377bc",
+        "type": "server-state-changed",
+        "z": "90731cdb.5be3c",
+        "name": "Will at Tesco",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "device_tracker.will_surridges_iphone_2",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "tesco",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 160,
+        "y": 463.33331298828125,
+        "wires": [
+            [
+                "c21c6857.303b18"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "cede756c.f07648",
+        "type": "comment",
+        "z": "90731cdb.5be3c",
+        "name": "Camera Feed",
+        "info": "",
+        "x": 137.77777862548828,
+        "y": 638.8888816833496,
+        "wires": []
+    },
+    {
+        "id": "a7f772e0.9a344",
+        "type": "server-state-changed",
+        "z": "90731cdb.5be3c",
+        "name": "Motion",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.diningroom_motion_sensor",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "detected",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 89.99998474121094,
+        "y": 687.7777709960938,
+        "wires": [
+            [
+                "67edd8c8.42d9a8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "67edd8c8.42d9a8",
+        "type": "api-current-state",
+        "z": "90731cdb.5be3c",
+        "name": "Presence on",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.front_door_presence",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 289.22222900390625,
+        "y": 682.6666259765625,
+        "wires": [
+            [
+                "26acb04f.0090d"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "26acb04f.0090d",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "ios_will_surridges_iphone",
+        "entityId": "",
+        "data": "{\"message\":\"Motion Detected in the Dining Room\",\"data\":{\"attachment\":{\"content-type\":\"jpeg\"},\"push\":{\"category\":\"camera\"},\"entity_id\":\"camera.dining_room\"}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 588,
+        "y": 677,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "833e9cfc.23a13",
+        "type": "inject",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 100,
+        "y": 753,
+        "wires": [
+            [
+                "67edd8c8.42d9a8"
+            ]
+        ]
+    },
+    {
+        "id": "a28759b3.590c58",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    }
+]
