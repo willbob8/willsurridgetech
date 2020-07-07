@@ -1,0 +1,400 @@
+[
+    {
+        "id": "67664e43.de2db",
+        "type": "server-events",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "event_type": "ios.action_fired",
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "x": 107.7778091430664,
+        "y": 946.3333415985107,
+        "wires": [
+            [
+                "eafcac5f.b9a9a"
+            ]
+        ]
+    },
+    {
+        "id": "eafcac5f.b9a9a",
+        "type": "switch",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "property": "payload.event.actionName",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Sleep",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Cave ",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Outdoor",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 292.7778091430664,
+        "y": 945.3333415985107,
+        "wires": [
+            [
+                "392d159f.5dd40a"
+            ],
+            [
+                "bb3c49e4.6d98f8"
+            ],
+            [
+                "25eed4d6.b7e7fc"
+            ]
+        ]
+    },
+    {
+        "id": "392d159f.5dd40a",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Sleep Scene On",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_on",
+        "entityId": "input_boolean.sleep_scene",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 498.88890838623047,
+        "y": 871.6666812896729,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb3c49e4.6d98f8",
+        "type": "api-current-state",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "switch.cave",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 560.6666717529297,
+        "y": 919.6666717529297,
+        "wires": [
+            [
+                "83ca8247.ca2a9"
+            ]
+        ]
+    },
+    {
+        "id": "83ca8247.ca2a9",
+        "type": "switch",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 551.6666717529297,
+        "y": 991.6666717529297,
+        "wires": [
+            [
+                "2c949590.7839ca"
+            ],
+            [
+                "f4deb10b.a48de"
+            ]
+        ]
+    },
+    {
+        "id": "2c949590.7839ca",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Cave off",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "scene",
+        "service": "turn_on",
+        "entityId": "scene.cave_off",
+        "data": "{}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 752.6666717529297,
+        "y": 987.6666717529297,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f4deb10b.a48de",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "Cave on",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "scene",
+        "service": "turn_on",
+        "entityId": "scene.cave_on",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 752.6666717529297,
+        "y": 1038.6666717529297,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "df12810d.ba5fe",
+        "type": "comment",
+        "z": "90731cdb.5be3c",
+        "name": "IOS Widgets",
+        "info": "",
+        "x": 85.7778091430664,
+        "y": 892.3333415985107,
+        "wires": []
+    },
+    {
+        "id": "25eed4d6.b7e7fc",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "switch",
+        "service": "turn_on",
+        "entityId": "switch.festoon",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 488.8888931274414,
+        "y": 1071.1110744476318,
+        "wires": [
+            [
+                "b1ed7a08.d48488"
+            ]
+        ]
+    },
+    {
+        "id": "b1ed7a08.d48488",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.left_kallax_led, light.right_kallax_led",
+        "data": "{\"brightness\":255,\"rgb_color\":[255,0,255]}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 515.5555267333984,
+        "y": 1125.5555610656738,
+        "wires": [
+            [
+                "612665ea.e9dbcc",
+                "39180e67.6a1e92"
+            ]
+        ]
+    },
+    {
+        "id": "612665ea.e9dbcc",
+        "type": "api-current-state",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.guest_mode",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 644.4443969726562,
+        "y": 1182.22216796875,
+        "wires": [
+            [
+                "abe824f6.9abea8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "abe824f6.9abea8",
+        "type": "api-call-service",
+        "z": "90731cdb.5be3c",
+        "name": "",
+        "server": "a28759b3.590c58",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.sitting_room",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 628.8888549804688,
+        "y": 1242.22216796875,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f596eb80.907038",
+        "type": "sonos-universal",
+        "z": "90731cdb.5be3c",
+        "confignode": "5e6a2e42.2ed72",
+        "compatibilityMode": false,
+        "command": "group.play.queue",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 1067.7777099609375,
+        "y": 1268.8887939453125,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "39180e67.6a1e92",
+        "type": "sonos-universal",
+        "z": "90731cdb.5be3c",
+        "confignode": "5e6a2e42.2ed72",
+        "compatibilityMode": false,
+        "command": "player.set.volume",
+        "state": "30",
+        "stateType": "str",
+        "name": "",
+        "x": 938.7777099609375,
+        "y": 1122.8887939453125,
+        "wires": [
+            [
+                "7a1bf16d.b0c99"
+            ]
+        ]
+    },
+    {
+        "id": "7a1bf16d.b0c99",
+        "type": "sonos-universal",
+        "z": "90731cdb.5be3c",
+        "confignode": "5e6a2e42.2ed72",
+        "compatibilityMode": false,
+        "command": "group.clear.queue",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 972.7777099609375,
+        "y": 1175.8887939453125,
+        "wires": [
+            [
+                "4995ec15.e2cf14"
+            ]
+        ]
+    },
+    {
+        "id": "4995ec15.e2cf14",
+        "type": "sonos-manage-mysonos",
+        "z": "90731cdb.5be3c",
+        "confignode": "5e6a2e42.2ed72",
+        "compatibilityMode": false,
+        "command": "mysonos.queue.item",
+        "state": "Evening jazz and some wine",
+        "stateType": "str",
+        "name": "",
+        "x": 1036.7777099609375,
+        "y": 1224.8887939453125,
+        "wires": [
+            [
+                "f596eb80.907038"
+            ]
+        ]
+    },
+    {
+        "id": "a28759b3.590c58",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    },
+    {
+        "id": "5e6a2e42.2ed72",
+        "type": "sonos-config",
+        "z": "",
+        "name": "Kitchen",
+        "serialnum": "34-7E-5C-AA-BB-CC:1",
+        "ipaddress": "192.168.0.115"
+    }
+]
