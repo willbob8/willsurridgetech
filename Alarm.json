@@ -1,0 +1,486 @@
+[
+    {
+        "id": "420c0068.18e6a",
+        "type": "server-state-changed",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.alarm",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 231,
+        "y": 3004,
+        "wires": [
+            [
+                "62ae2654.f76738"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "62ae2654.f76738",
+        "type": "api-current-state",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_datetime.alarm_time",
+        "state_type": "str",
+        "state_location": "alarm",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 390,
+        "y": 3056,
+        "wires": [
+            [
+                "dc165ff9.8cbca"
+            ]
+        ]
+    },
+    {
+        "id": "dc165ff9.8cbca",
+        "type": "function",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "func": "msg.hour = (msg.alarm[0] + msg.alarm[1])\nmsg.minute = (msg.alarm[3] + msg.alarm[4])\n\nmsg.minute = Number(msg.minute) - 30\n\nif(msg.minute<0){\n    msg.hour = Number(msg.hour)-1\n    msg.minute = 60 + msg.minute\n}\nif(msg.minute<10){\n    msg.minute = \"0\" + String(msg.minute)\n}\nif(msg.hour == \"-1\"){\n    msg.hour = \"23\"\n}\nmsg.start = msg.hour + \":\" + msg.minute\n\nif(msg.start.length == 4){\n    msg.start = \"0\" + msg.start\n}\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 401,
+        "y": 3116,
+        "wires": [
+            [
+                "ca2686d6.0f4718",
+                "5c9abf8f.4072d"
+            ]
+        ]
+    },
+    {
+        "id": "ca2686d6.0f4718",
+        "type": "ha-wait-until",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "outputs": 1,
+        "entityId": "sensor.time",
+        "entityIdFilterType": "exact",
+        "property": "state",
+        "comparator": "is",
+        "value": "start",
+        "valueType": "msg",
+        "timeout": 0,
+        "timeoutType": "num",
+        "timeoutUnits": "seconds",
+        "entityLocation": "",
+        "entityLocationType": "none",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "x": 502,
+        "y": 3171,
+        "wires": [
+            [
+                "4850d4af.c57e4c",
+                "da973da6.fc4bd",
+                "b1d13a07.178408"
+            ]
+        ]
+    },
+    {
+        "id": "4850d4af.c57e4c",
+        "type": "api-call-service",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.bedroom",
+        "data": "{\"brightness\":1,\"color_temp\":500}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 789,
+        "y": 3004,
+        "wires": [
+            [
+                "17417aa4.807df5"
+            ]
+        ]
+    },
+    {
+        "id": "17417aa4.807df5",
+        "type": "api-call-service",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.bedroom",
+        "data": "{\"brightness\":255,\"color_temp\":143,\"transition\":1800}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 808,
+        "y": 3047,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "da973da6.fc4bd",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "group.clear.queue",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 755,
+        "y": 3179,
+        "wires": [
+            [
+                "9e774fc1.bd962"
+            ]
+        ]
+    },
+    {
+        "id": "733e2be7.112894",
+        "type": "delay",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 768,
+        "y": 3262,
+        "wires": [
+            [
+                "f302560f.9db638"
+            ]
+        ]
+    },
+    {
+        "id": "3aa0114b.09379e",
+        "type": "delay",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 770,
+        "y": 3324,
+        "wires": [
+            [
+                "571330ed.212f3"
+            ]
+        ]
+    },
+    {
+        "id": "98719fa4.4691f",
+        "type": "delay",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 775,
+        "y": 3378,
+        "wires": [
+            [
+                "6fc0bce4.6b8a44"
+            ]
+        ]
+    },
+    {
+        "id": "f302560f.9db638",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "player.set.volume",
+        "state": "10",
+        "stateType": "str",
+        "name": "",
+        "x": 940,
+        "y": 3261,
+        "wires": [
+            [
+                "3aa0114b.09379e"
+            ]
+        ]
+    },
+    {
+        "id": "b1d13a07.178408",
+        "type": "delay",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "20",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 414,
+        "y": 3280,
+        "wires": [
+            [
+                "468f67ec.687c68"
+            ]
+        ]
+    },
+    {
+        "id": "468f67ec.687c68",
+        "type": "api-call-service",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "alexa_media_bedroom_spot",
+        "entityId": "",
+        "data": "{\"message\":\"10 Minutes left in bed!\",\"data\":{\"type\":\"announce\"},\"target\":\"{{service}}\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 433,
+        "y": 3334,
+        "wires": [
+            [
+                "b0340b3a.e958f8"
+            ]
+        ]
+    },
+    {
+        "id": "b0340b3a.e958f8",
+        "type": "delay",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 414,
+        "y": 3387,
+        "wires": [
+            [
+                "80d67185.b70d7"
+            ]
+        ]
+    },
+    {
+        "id": "b18db52a.b35c18",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "player.set.volume",
+        "state": "25",
+        "stateType": "str",
+        "name": "",
+        "x": 443,
+        "y": 3476,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "80d67185.b70d7",
+        "type": "api-call-service",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "alexa_media_bedroom_spot",
+        "entityId": "",
+        "data": "{\"message\":\"Time to get up now!\",\"data\":{\"type\":\"announce\"},\"target\":\"{{service}}\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 407,
+        "y": 3429,
+        "wires": [
+            [
+                "b18db52a.b35c18"
+            ]
+        ]
+    },
+    {
+        "id": "5c9abf8f.4072d",
+        "type": "debug",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 565,
+        "y": 3109,
+        "wires": []
+    },
+    {
+        "id": "6fc0bce4.6b8a44",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "player.set.volume",
+        "state": "20",
+        "stateType": "str",
+        "name": "",
+        "x": 958,
+        "y": 3379,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3cb542f1.6d703e",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "group.play.queue",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 1178,
+        "y": 3182,
+        "wires": [
+            [
+                "733e2be7.112894"
+            ]
+        ]
+    },
+    {
+        "id": "9e774fc1.bd962",
+        "type": "sonos-manage-mysonos",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "mysonos.queue.item",
+        "state": "Wake Up and Smell the Coffee",
+        "stateType": "str",
+        "name": "",
+        "x": 969,
+        "y": 3183,
+        "wires": [
+            [
+                "3cb542f1.6d703e"
+            ]
+        ]
+    },
+    {
+        "id": "571330ed.212f3",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "player.set.volume",
+        "state": "15",
+        "stateType": "str",
+        "name": "",
+        "x": 952,
+        "y": 3324,
+        "wires": [
+            [
+                "98719fa4.4691f"
+            ]
+        ]
+    },
+    {
+        "id": "36a52212.74ceee",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    },
+    {
+        "id": "9c4d66db.73d008",
+        "type": "sonos-config",
+        "z": "",
+        "name": "Bedroom",
+        "serialnum": "78-28-CA-AA-BB-CC:A",
+        "ipaddress": "192.168.0.1"
+    }
+]
