@@ -66,14 +66,14 @@
         "id": "dc165ff9.8cbca",
         "type": "function",
         "z": "2fa5b79a.804b18",
-        "name": "",
+        "name": "Video Function",
         "func": "msg.hour = (msg.alarm[0] + msg.alarm[1])\nmsg.minute = (msg.alarm[3] + msg.alarm[4])\n\nmsg.minute = Number(msg.minute) - 30\n\nif(msg.minute<0){\n    msg.hour = Number(msg.hour)-1\n    msg.minute = 60 + msg.minute\n}\nif(msg.minute<10){\n    msg.minute = \"0\" + String(msg.minute)\n}\nif(msg.hour == \"-1\"){\n    msg.hour = \"23\"\n}\nmsg.start = msg.hour + \":\" + msg.minute\n\nif(msg.start.length == 4){\n    msg.start = \"0\" + msg.start\n}\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 401,
-        "y": 3116,
+        "x": 376,
+        "y": 3120,
         "wires": [
             [
                 "ca2686d6.0f4718",
@@ -178,6 +178,42 @@
         ]
     },
     {
+        "id": "9e774fc1.bd962",
+        "type": "sonos-manage-mysonos",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "mysonos.queue.item",
+        "state": "Wake Up and Smell the Coffee",
+        "stateType": "str",
+        "name": "",
+        "x": 969,
+        "y": 3183,
+        "wires": [
+            [
+                "3cb542f1.6d703e"
+            ]
+        ]
+    },
+    {
+        "id": "3cb542f1.6d703e",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "group.play.queue",
+        "state": "",
+        "stateType": "str",
+        "name": "",
+        "x": 1178,
+        "y": 3182,
+        "wires": [
+            [
+                "733e2be7.112894"
+            ]
+        ]
+    },
+    {
         "id": "733e2be7.112894",
         "type": "delay",
         "z": "2fa5b79a.804b18",
@@ -262,6 +298,40 @@
             [
                 "3aa0114b.09379e"
             ]
+        ]
+    },
+    {
+        "id": "571330ed.212f3",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "player.set.volume",
+        "state": "15",
+        "stateType": "str",
+        "name": "",
+        "x": 952,
+        "y": 3324,
+        "wires": [
+            [
+                "98719fa4.4691f"
+            ]
+        ]
+    },
+    {
+        "id": "6fc0bce4.6b8a44",
+        "type": "sonos-universal",
+        "z": "2fa5b79a.804b18",
+        "confignode": "9c4d66db.73d008",
+        "compatibilityMode": false,
+        "command": "player.set.volume",
+        "state": "20",
+        "stateType": "str",
+        "name": "",
+        "x": 958,
+        "y": 3379,
+        "wires": [
+            []
         ]
     },
     {
@@ -394,74 +464,40 @@
         "wires": []
     },
     {
-        "id": "6fc0bce4.6b8a44",
-        "type": "sonos-universal",
+        "id": "c23bb3e.e69705",
+        "type": "comment",
         "z": "2fa5b79a.804b18",
-        "confignode": "9c4d66db.73d008",
-        "compatibilityMode": false,
-        "command": "player.set.volume",
-        "state": "20",
-        "stateType": "str",
-        "name": "",
-        "x": 958,
-        "y": 3379,
+        "name": "Alarm",
+        "info": "",
+        "x": 91,
+        "y": 2927,
+        "wires": []
+    },
+    {
+        "id": "8eebf73e.fe1448",
+        "type": "function",
+        "z": "2fa5b79a.804b18",
+        "name": "Better Function",
+        "func": "// New variable (date = date + time), .substring gets the first 4 characters of the msg\nvar d = new Date(\"2020-09-05 \" + msg.alarm.substring(0,5));\n\n// Set the minutes of d to the minutes of alarm, minus 30\nd.setMinutes(d.getMinutes() - 30);\n\n// Reformat a bit - add leading zero, hours, colon\nmsg.start =  ('0' + (d.getHours())).slice(-2) + \":\" + ('0' + (d.getMinutes())).slice(-2);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 186,
+        "y": 3190,
         "wires": [
             []
         ]
     },
     {
-        "id": "3cb542f1.6d703e",
-        "type": "sonos-universal",
+        "id": "65e5cba6.179eb4",
+        "type": "comment",
         "z": "2fa5b79a.804b18",
-        "confignode": "9c4d66db.73d008",
-        "compatibilityMode": false,
-        "command": "group.play.queue",
-        "state": "",
-        "stateType": "str",
-        "name": "",
-        "x": 1178,
-        "y": 3182,
-        "wires": [
-            [
-                "733e2be7.112894"
-            ]
-        ]
-    },
-    {
-        "id": "9e774fc1.bd962",
-        "type": "sonos-manage-mysonos",
-        "z": "2fa5b79a.804b18",
-        "confignode": "9c4d66db.73d008",
-        "compatibilityMode": false,
-        "command": "mysonos.queue.item",
-        "state": "Wake Up and Smell the Coffee",
-        "stateType": "str",
-        "name": "",
-        "x": 969,
-        "y": 3183,
-        "wires": [
-            [
-                "3cb542f1.6d703e"
-            ]
-        ]
-    },
-    {
-        "id": "571330ed.212f3",
-        "type": "sonos-universal",
-        "z": "2fa5b79a.804b18",
-        "confignode": "9c4d66db.73d008",
-        "compatibilityMode": false,
-        "command": "player.set.volume",
-        "state": "15",
-        "stateType": "str",
-        "name": "",
-        "x": 952,
-        "y": 3324,
-        "wires": [
-            [
-                "98719fa4.4691f"
-            ]
-        ]
+        "name": "Replace Function with this!",
+        "info": "This function below is a much neater version of the function I went through in the video.\n\nHuge shout out to TheHellis for this, much better and simpler way of dealing with time!",
+        "x": 138,
+        "y": 3157,
+        "wires": []
     },
     {
         "id": "36a52212.74ceee",
@@ -480,7 +516,7 @@
         "type": "sonos-config",
         "z": "",
         "name": "Bedroom",
-        "serialnum": "78-28-CA-AA-BB-CC:A",
-        "ipaddress": "192.168.0.1"
+        "serialnum": "78-28-CA-A6-20-34:A",
+        "ipaddress": "192.168.0.112"
     }
 ]
