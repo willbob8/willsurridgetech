@@ -500,6 +500,39 @@
         "wires": []
     },
     {
+        "id": "26268b3.44a5974",
+        "type": "moment",
+        "z": "2fa5b79a.804b18",
+        "name": "",
+        "topic": "",
+        "input": "alarm",
+        "inputType": "msg",
+        "inTz": "Europe/Brussels",
+        "adjAmount": "30",
+        "adjType": "minutes",
+        "adjDir": "subtract",
+        "format": "HH:mm",
+        "locale": "C",
+        "output": "start",
+        "outputType": "msg",
+        "outTz": "Europe/Brussels",
+        "x": 147.14285278320312,
+        "y": 3258.57151222229,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e8e9b362.a7a41",
+        "type": "comment",
+        "z": "2fa5b79a.804b18",
+        "name": "Or this!",
+        "info": "",
+        "x": 91.42857360839844,
+        "y": 3227.142907142639,
+        "wires": []
+    },
+    {
         "id": "36a52212.74ceee",
         "type": "server",
         "z": "",
