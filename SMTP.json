@@ -1,0 +1,137 @@
+[
+    {
+        "id": "c8176c37.037a8",
+        "type": "comment",
+        "z": "161d34ed.c178cb",
+        "name": "Email Notification",
+        "info": "",
+        "x": 133,
+        "y": 2282,
+        "wires": []
+    },
+    {
+        "id": "4b1e7d4d.2d4f94",
+        "type": "inject",
+        "z": "161d34ed.c178cb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 408,
+        "y": 2322,
+        "wires": [
+            [
+                "aaaf884d.19ed48"
+            ]
+        ]
+    },
+    {
+        "id": "27740a63.b26e76",
+        "type": "api-call-service",
+        "z": "161d34ed.c178cb",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "gmail",
+        "entityId": "",
+        "data": "{\"title\":\"MOTION!\",\"message\":\"Motion detected by amcrest camera\",\"data\":{\"images\":[\"/config/www/amcrest-motion.jpg\"]}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 823,
+        "y": 2380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1c76904d.aec2e",
+        "type": "server-state-changed",
+        "z": "161d34ed.c178cb",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.amcrest_camera_motion_detected",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "x": 266,
+        "y": 2415,
+        "wires": [
+            [
+                "aaaf884d.19ed48"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "aaaf884d.19ed48",
+        "type": "api-call-service",
+        "z": "161d34ed.c178cb",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "camera",
+        "service": "snapshot",
+        "entityId": "camera.amcrest_camera",
+        "data": "{\"filename\":\"/config/www/amcrest-motion.jpg\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 631,
+        "y": 2432,
+        "wires": [
+            [
+                "27740a63.b26e76"
+            ]
+        ]
+    },
+    {
+        "id": "36a52212.74ceee",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    }
+]
