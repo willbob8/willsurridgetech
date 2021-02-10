@@ -1,0 +1,53 @@
+type: picture-elements
+image: /local/FloorplanDemo/Night.png
+elements:
+  - type: image
+    entity: light.XXXX
+    style:
+      left: 50%
+      top: 50%
+      width: 100%
+      mix-blend-mode: lighten
+      filter: >-
+        ${ "hue-rotate(" + (states['light.XXXX'].attributes.hs_color
+        ? states['light.XXXX'].attributes.hs_color[0] : 0) + "deg)"}
+      opacity: "${states['light.XXXX'].state === 'on' ? (states['light.XXXX'].attributes.brightness / 255) : '0'}"
+    state_image:
+      'on': /local/FloorplanDemo/XXXX.png
+      'off': /local/FloorplanDemo/Night.png
+    tap_action:
+      action: none
+  - type: image
+    entity: light.YYYY
+    style:
+      left: 50%
+      top: 50%
+      width: 100%
+      mix-blend-mode: lighten
+      filter: >-
+        ${ "hue-rotate(" + (states['light.YYYY'].attributes.hs_color
+        ? states['light.YYYY'].attributes.hs_color[0] : 0) + "deg)"}
+      opacity: "${states['light.YYYY'].state === 'on' ? (states['light.YYYY'].attributes.brightness / 255) : '0'}"
+    state_image:
+      'on': /local/FloorplanDemo/YYYY.png
+      'off': /local/FloorplanDemo/Night.png
+    tap_action:
+      action: none
+### ADD ANY MORE IMAGES IN HERE
+
+  - type: state-icon
+    entity: light.XXXX
+    style:
+      left: 80%
+      top: 70%
+    tap_action:
+      action: toggle
+  - type: state-icon
+    entity: light.YYYY
+    style:
+      left: 30%
+      top: 70%
+    tap_action:
+      action: toggle
+
+### ADD ANY MORE ICONS IN HERE
