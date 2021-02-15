@@ -1,0 +1,875 @@
+### Pithy Screen Menu System for controlling Home Assistant
+###
+### Created by: Milan Korenica
+### Licensed under GNU General Public License v3.0
+
+esphome:
+  name: ${unitName}
+  platform: ${boardPlatform}
+  board: ${boardName}
+#set default for rotary
+  on_boot:
+    priority: 250
+    then:
+      - sensor.rotary_encoder.set_value:
+          id: rotary_dial
+          value: 0
+      - binary_sensor.template.publish:
+          id: api_connected
+          state: OFF
+      - wait_until:
+          api.connected
+      - sensor.rotary_encoder.set_value:
+          id: rotary_dial
+          value: 0
+      - binary_sensor.template.publish:
+          id: api_connected
+          state: ON
+
+wifi:
+  ssid: !secret wifiSSID
+  password: !secret wifiPass
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "pithy"
+    password: "pithypithy"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret passESPH
+
+ota:
+  password: !secret passOTA
+
+#####
+#####  CONFIGURATION BLOCK HERE
+#####
+substitutions:
+  boardPlatform: ESP8266
+  boardName: d1_mini
+  unitName: pithy_screen
+  friendlyName: Pithy Screen
+
+  encoderPinA: D5
+  encoderPinB: D6
+  encoderSwitch: D7
+  i2cData: D1
+  i2cClock: D2
+  pir: D0
+  button: TX
+
+  # Menu system
+  menuDepth: '2'
+  menuSize: '16'
+
+#####  END OF CONFIGURATION BLOCK
+
+globals:
+# Screensaver
+   - id: ss_x
+     type: signed char
+     initial_value: '0'
+
+   - id: ss_y
+     type: signed char
+     initial_value: '8'
+
+   - id: ss_vx
+     type: signed char
+     initial_value: '1'
+
+   - id: ss_vy
+     type: signed char
+     initial_value: '1'
+
+   - id: wi
+     type: unsigned char
+     initial_value: '0'
+
+# Blank screen
+   - id: s_blank
+     type: bool
+     initial_value: 'false'
+
+# Menu helpers
+
+   - id: menu_max_level
+     type: unsigned char
+     initial_value: '${menuDepth}'
+
+   - id: menu_level
+     type: unsigned char
+
+   - id: menu_position
+     type: unsigned char[${menuDepth}]
+
+   - id: menu_parent
+     type: unsigned char[${menuDepth}]
+
+   - id: menu_current_node
+     type: unsigned char
+
+   - id: menu_current_label
+     type: char *
+
+   - id: menu_current_value
+     type: float
+
+   - id: menu_set_mode
+     type: bool
+     initial_value: 'false'
+
+#####
+#####  CONFIGURATION BLOCK HERE
+#####
+
+     # Set these to labels you want to display
+   - id: menu_labels
+     type: char * [${menuSize}]
+     initial_value: '{"Saver","Scenes","Music","Lights","Cooking","Dinner","Retire","Volume","Ella","LBC","Jazz","Radio 2","Kitchen Counter","Kitchen Top","Dining Counter","Dining Top"}'
+
+     # Set these to functions of particular menu items
+   - id: menu_functions
+     type: unsigned char[${menuSize}]
+     initial_value: '{0,2,2,2,5,5,5,3,5,5,5,5,4,4,4,4}'
+
+     # For submenu items, what are the children?
+   - id: menu_child
+     type: unsigned char[${menuSize}]
+     initial_value: '{0,4,7,12,0,0,0,0,0,0,0,0,0,0,0,0}'
+
+     # How many items are there for each submenu? For continuous settings, what is the range?
+   - id: menu_length
+     type: unsigned char[${menuSize}]
+     initial_value: '{4,3,5,4,0,0,0,50,0,0,0,0,0,0,0,0}'
+
+script:
+# What value to display for each menu item
+  - id: menu_values
+    then:
+      - lambda: |-
+          switch(id(menu_current_node)) {
+            case 7: id(menu_current_value) = id(media_player_kitchen_volume_level).state * 100; break;
+
+            case 12: id(menu_current_value) = id(light_kitchen_counter_led).state ? 1 : 0; break;
+
+            case 13: id(menu_current_value) = id(light_wled_kitchen).state ? 1 : 0; break;
+
+            case 14: id(menu_current_value) = id(light_wled_dining_bottom).state ? 1 : 0; break;
+
+            case 15: id(menu_current_value) = id(light_wled_dining_top).state ? 1 : 0; break;
+
+
+          }
+
+# What value to set rotary encoder to for each menu item setting
+  - id: menu_set_rotary
+    then:
+      - lambda: |-
+          switch(id(menu_current_node)) {
+            case 7: id(rotary_dial).set_value(round((id(media_player_kitchen_volume_level).state)/0.01)); break;
+
+            case 12: id(rotary_dial).set_value(id(light_kitchen_counter_led).state ? 1 : 0); break;
+
+            case 13: id(rotary_dial).set_value(id(light_wled_kitchen).state ? 1 : 0); break;
+
+            case 14: id(rotary_dial).set_value(id(light_wled_dining_bottom).state ? 1 : 0); break;
+
+            case 15: id(rotary_dial).set_value(id(light_wled_dining_top).state ? 1 : 0); break;
+
+
+          }
+
+# Actions for each menu item setting
+  - id: menu_actions
+    then:
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 4;'
+          then:
+            homeassistant.service:
+              service: input_boolean.turn_on
+              data:
+                entity_id: input_boolean.cooking_scene
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 5;'
+          then:
+            homeassistant.service:
+              service: input_boolean.turn_on
+              data:
+                entity_id: input_boolean.dinner_scene
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 6;'
+          then:
+            homeassistant.service:
+              service: input_boolean.turn_on
+              data:
+                entity_id: input_boolean.retire_scene
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 7;'
+          then:
+            homeassistant.service:
+              variables:
+                x: 'return id(rotary_dial).state*0.01;'
+              service: media_player.volume_set
+              data_template:
+                entity_id: media_player.kitchen
+                volume_level: '{{ x }}'
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 8;'
+          then:
+            homeassistant.service:
+              service: media_player.select_source
+              data:
+                entity_id: media_player.kitchen
+                source: Ella Fitzgerald Radio
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 9;'
+          then:
+            homeassistant.service:
+              service: media_player.select_source
+              data:
+                entity_id: media_player.kitchen
+                source: LBC
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 10;'
+          then:
+            homeassistant.service:
+              service: media_player.select_source
+              data:
+                entity_id: media_player.kitchen
+                source: Evening jazz and some wine
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 11;'
+          then:
+            homeassistant.service:
+              service: media_player.select_source
+              data:
+                entity_id: media_player.kitchen
+                source: BBC Radio 2
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 12;'
+          then:
+            if:
+              condition:
+                lambda: 'return id(rotary_dial).state;'
+              then:
+                homeassistant.service:
+                  service: light.turn_on
+                  data:
+                    entity_id: light.kitchen_counter_led
+              else:
+                homeassistant.service:
+                  service: light.turn_off
+                  data:
+                    entity_id: light.kitchen_counter_led
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 13;'
+          then:
+            if:
+              condition:
+                lambda: 'return id(rotary_dial).state;'
+              then:
+                homeassistant.service:
+                  service: light.turn_on
+                  data:
+                    entity_id: light.wled_kitchen
+              else:
+                homeassistant.service:
+                  service: light.turn_off
+                  data:
+                    entity_id: light.wled_kitchen
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 14;'
+          then:
+            if:
+              condition:
+                lambda: 'return id(rotary_dial).state;'
+              then:
+                homeassistant.service:
+                  service: light.turn_on
+                  data:
+                    entity_id: light.wled_dining_bottom
+              else:
+                homeassistant.service:
+                  service: light.turn_off
+                  data:
+                    entity_id: light.wled_dining_bottom
+
+      - if:
+          condition:
+            lambda: 'return id(menu_current_node) == 15;'
+          then:
+            if:
+              condition:
+                lambda: 'return id(rotary_dial).state;'
+              then:
+                homeassistant.service:
+                  service: light.turn_on
+                  data:
+                    entity_id: light.wled_dining_top
+              else:
+                homeassistant.service:
+                  service: light.turn_off
+                  data:
+                    entity_id: light.wled_dining_top
+
+
+
+# Action when dial is pressed on screensaver screen
+  - id: dial_ss_press
+    then:
+      homeassistant.service:
+        service: media_player.media_play_pause
+        data:
+          entity_id: media_player.kitchen
+
+
+# Action when button is pressed on screensaver screen
+  - id: button_1_ss_press
+    then:
+      homeassistant.service:
+        service: media_player.media_play_pause
+        data:
+          entity_id: media_player.kitchen
+
+
+#####  END OF CONFIGURATION BLOCK
+
+  - id: ss_timeout
+    mode: restart
+    then:
+      - delay: 1min
+      - lambda: >-
+          id(menu_level) = 0;
+          id(menu_position)[0] = 0;
+          id(menu_parent)[0] = 0;
+          id(menu_current_node) = 0;
+          id(menu_set_mode) = false;
+          id(rotary_dial).set_value(0);
+
+
+interval:
+# Screen saver logic & wait indicator
+  - interval: 0.2s
+    then:
+      - lambda: |-
+          id(ss_x) += id(ss_vx);
+          id(ss_y) += id(ss_vy);
+          if(id(ss_x)>45 || id(ss_x)<1) id(ss_vx) *= -1;
+          if(id(ss_y)>29 || id(ss_y)<6) id(ss_vy) *= -1;
+          id(wi) = ++id(wi) > 15 ? 0 : id(wi); // wait indicator logic
+
+i2c:
+  sda: ${i2cData}
+  scl: ${i2cClock}
+  frequency: 200kHz
+  scan: True
+  id: bus_a
+
+time:
+  - platform: homeassistant
+    id: ha_time
+
+font:
+  - file: "OpenSans-Regular.ttf"
+    id: big_font
+    size: 31
+    glyphs: ":0123456789"
+
+  - file: "OpenSans-Light.ttf"
+    id: small_font
+    size: 19
+    glyphs: ">-:/&!°0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ."
+
+  - file: "OpenSans-Light.ttf"
+    id: tiny_font
+    size: 12
+    glyphs: ":0123456789Conectig."
+
+display:
+  - platform: ssd1306_i2c
+    model: "SH1106 128x64"
+    address: 0x3C
+    update_interval: 0.1s
+    id: idisplay
+    lambda: |-
+      // Blank screen if PIR off
+      if (id(s_blank)) { it.fill(COLOR_OFF); return; }
+
+      if (!id(api_connected).state){
+        // Little animation before API is online
+        it.line(56, 32, 56+id(wi), 32);
+      } else {
+
+      // Screensaver is always node 0
+      if(id(menu_current_node)==0) {
+
+        // Bouncy time
+        it.strftime(id(ss_x), id(ss_y), id(big_font), "%H:%M", id(ha_time).now());
+      }
+      else {
+
+        // Header time
+        it.strftime(0, 6, id(tiny_font), COLOR_ON, TextAlign::CENTER_LEFT, "%H:%M", id(ha_time).now());
+        // Header wifi
+        for(int i=0; i<5; i++) if(i<id(wifistep).state) it.filled_rectangle(102+i*5,8-i*2,4,i*2+4); else it.rectangle(102+i*5,8-i*2,4,i*2+4);
+        // Header menu level
+        if(id(menu_level)>0){
+
+          // y-ccord start of the level display
+          int b = 64 - (4 * id(menu_level));
+          for(int i=0; i<id(menu_level); i++) {
+
+            // Start of this symbol
+            int itb = b + i*8;
+            // Top line
+            it.line(itb, 2, itb+6, 6);
+            // Bottom line
+            it.line(itb+6, 6, itb, 10);
+
+          };
+        }
+        // Footer menu position
+        // y-coord start of the menu pos display
+        int b = 64 - (2 * id(menu_length)[id(menu_parent)[id(menu_level)]]);
+        for(int i=0; i<id(menu_length)[id(menu_parent)[id(menu_level)]]; i++) {
+
+          // Start of this symbol
+          int itb = b + i*4;
+          if(id(menu_position)[id(menu_level)] == i) it.filled_rectangle(itb, 61, 3, 3);
+          else it.draw_pixel_at(itb+1, 62);
+
+        };
+
+
+        // Show label
+        bool s = !id(menu_set_mode) &&
+                (id(menu_functions)[id(menu_current_node)] == 2 ||
+                 id(menu_functions)[id(menu_current_node)] == 3 ||
+                 id(menu_functions)[id(menu_current_node)] == 4 ||
+                 id(menu_functions)[id(menu_current_node)] == 6 );
+        it.printf(64, 33, id(small_font), TextAlign::TOP_CENTER, "%s%s", id(menu_labels)[id(menu_current_node)], s ? " >" : "" );
+
+        // Show value
+        if(id(menu_set_mode)) {
+
+          switch(id(menu_functions)[id(menu_current_node)]){
+
+            case 3:
+            case 6:
+              // Value
+              it.printf(127, 12, id(small_font), TextAlign::TOP_RIGHT, "%.2f", id(menu_current_value));
+              // Setting progressbar, outline rectangle
+              it.rectangle(0, 20, 54, 12);
+              // Inner fill
+              it.filled_rectangle(2, 22, round(id(rotary_dial).state*0.50), 8);
+              break;
+            case 4:
+              // Labels
+              it.printf(42, 12, id(small_font), TextAlign::TOP_RIGHT, "Off");
+              it.printf(86, 12, id(small_font), TextAlign::TOP_LEFT, "On");
+              // Switch, outline rectangle
+              it.rectangle(52, 20, 24, 12);
+              // Inner toggle
+              it.filled_rectangle(54 + id(rotary_dial).state*10, 22, 10, 8);
+
+          }
+
+        } else {
+
+          // Show value only if Display or Setting
+          switch(id(menu_functions)[id(menu_current_node)]){
+
+            case 1:
+            case 3:
+            case 6:
+              it.printf(64, 12, id(small_font), TextAlign::TOP_CENTER, "%.2f", id(menu_current_value));
+              break;
+            case 4:
+            case 7:
+              it.printf(64, 12, id(small_font), TextAlign::TOP_CENTER, "%s", id(menu_current_value) == 0 ? "Off" : "On");
+              break;
+            case 5: // show button
+              it.rectangle(52, 19, 24, 14);
+              if(id(rotary_dial_push).state == 0){
+                // horizontal shades
+                it.line(53, 20, 73, 20);
+                it.line(54, 31, 72, 31);
+                // vertical shades
+                it.line(53, 20, 53, 30);
+                it.line(74, 21, 74, 29);
+
+              }
+              break;
+
+          }
+        }
+      }
+
+      }
+
+sensor:
+  - platform: rotary_encoder
+    id: rotary_dial
+    pin_a:
+      number: ${encoderPinA}
+      inverted: true
+      mode: INPUT_PULLUP
+    pin_b:
+      number: ${encoderPinB}
+      inverted: true
+      mode: INPUT_PULLUP
+    filters:
+      - lambda: |-
+          unsigned char a;
+          if(id(menu_set_mode)) { //if set mode, rotary should go from 0 to according setting
+
+            switch(id(menu_functions)[id(menu_current_node)]){
+              case 3:
+              case 6:
+                a = id(menu_length)[id(menu_current_node)] + 1; break; // continuous
+              case 4: a = 2; break;  // binary
+            }
+
+          } else { //if not, it should go to level length
+
+            //get current menu length
+            a = id(menu_length)[id(menu_parent)[id(menu_level)]];
+
+          }
+
+          //if rotary is over length, set to length
+          if(x >= a) {
+
+            id(rotary_dial).set_value(a-1);
+            return a-1;
+
+          }
+          else return x;
+    resolution: 1
+    min_value: 0
+    on_value:
+      then:
+        - if:
+            condition:
+              api.connected
+            then:
+              - if:
+                  condition:
+                    # Are we setting or browsing?
+                    lambda: 'return id(menu_set_mode);'
+                  then:
+                   # Change setting only if not in continuous + confirm
+                    - if:
+                        condition:
+                          lambda: 'return !(id(menu_functions)[id(menu_current_node)] == 6);'
+                        then:
+                          - script.execute: menu_actions
+                  else:
+                    # Browsing mode, set menu position
+                    - lambda: |-
+                        //set current node to start of current child + rotary position
+                        id(menu_current_node) = id(menu_child)[id(menu_parent)[id(menu_level)]] + x;
+                        //set current level position
+                        id(menu_position)[id(menu_level)] = x;
+                # Update value
+              - script.execute: menu_values
+              - script.execute: ss_timeout
+  - platform: wifi_signal
+    id: wifisignal
+    update_interval: 20s
+
+  - platform: template
+    id: wifistep
+    update_interval: 20s
+    lambda: |-
+      if(isnan(id(wifisignal).state)) return 0;
+      else return round((id(wifisignal).state+100)/10);
+
+  - platform: sht3xd
+    temperature:
+      name: "${friendlyName} Temperature"
+      id: ${unitName}_temperature
+      filters:
+        - offset: -4
+      on_value:
+        then:
+          # Logic to correctly update menu values
+          - script.execute: menu_values
+          - if:
+              condition:
+                lambda: 'return id(menu_set_mode);'
+              then:
+                - script.execute: menu_set_rotary
+          # End of menu values logic
+    humidity:
+      name: "${friendlyName} Humidity"
+      id: ${unitName}_humidity
+      on_value:
+        then:
+          # Logic to correctly update menu values
+          - script.execute: menu_values
+          - if:
+              condition:
+                lambda: 'return id(menu_set_mode);'
+              then:
+                - script.execute: menu_set_rotary
+          # End of menu values logic
+    address: 0x44
+    update_interval: 15s
+
+#####
+#####  CONFIGURATION BLOCK HERE
+#####
+
+# Sensors from Home Assistant
+  - platform: homeassistant
+    name: "HA sensor sensor.pithy_media_player_kitchen_volume_level"
+    entity_id: sensor.pithy_media_player_kitchen_volume_level
+    id: media_player_kitchen_volume_level
+    internal: true
+    on_value:
+      then:
+        # Logic to correctly update menu values
+        - script.execute: menu_values
+        - if:
+            condition:
+              lambda: 'return id(menu_set_mode);'
+            then:
+              - script.execute: menu_set_rotary
+        # End of menu values logic
+
+
+#####  END OF CONFIGURATION BLOCK
+
+binary_sensor:
+  - platform: gpio
+    id: rotary_dial_push
+    pin:
+      number: ${encoderSwitch}
+      inverted: true
+      mode: INPUT_PULLUP
+    on_press:
+      then:
+        - if:
+            condition:
+              api.connected
+            then:
+              # Execute screensaver action
+              - if:
+                  condition:
+                    lambda: 'return id(menu_current_node) == 0;'
+                  then:
+                    script.execute: dial_ss_press
+
+              - if:
+                  condition:
+                    # Execute continuous setting with confirmation when returning from set mode
+                    lambda: 'return id(menu_functions)[id(menu_current_node)] == 6 && id(menu_set_mode) == true;'
+                  then:
+                     - script.execute: menu_actions
+
+              - if:
+                  condition:
+                    # Set mode for continuous or binary setting
+                    lambda: 'return (id(menu_functions)[id(menu_current_node)] == 3 || id(menu_functions)[id(menu_current_node)] == 4  || id(menu_functions)[id(menu_current_node)] == 6);'
+                  then:
+                    - lambda: |-
+                        //toggle set mode
+                        if(id(menu_set_mode)) {
+
+                          id(menu_set_mode) = false;
+                          // restore rotary value to position
+                          id(rotary_dial).set_value(id(menu_position)[id(menu_level)]);
+
+                        } else id(menu_set_mode) = true;
+
+              - if:
+                  condition:
+                    # Button action
+                    lambda: 'return id(menu_functions)[id(menu_current_node)] == 5;'
+                  then:
+                     - script.execute: menu_actions
+
+              # If set mode, set rotary
+              - if:
+                  condition:
+                    lambda: 'return id(menu_set_mode);'
+                  then:
+                    - script.execute: menu_set_rotary
+
+              - if:
+                  condition:
+                    # Go to submenu. This needs to be last to prevent setting new item and also executing it
+                    lambda: 'return id(menu_functions)[id(menu_current_node)] == 2;'
+                  then:
+                    - lambda: |-
+                        //raise level up to max level
+                        id(menu_level) = ++id(menu_level) > id(menu_max_level) ? id(menu_max_level) : id(menu_level);
+                        //set parent node for new level
+                        id(menu_parent)[id(menu_level)] = id(menu_current_node);
+                        //set new current node
+                        id(menu_current_node) = id(menu_child)[id(menu_parent)[id(menu_level)]];
+                        //reset rotary to 0
+                        id(rotary_dial).set_value(0);
+                        //reset position in current level to 0
+                        id(menu_position)[id(menu_level)] = 0;
+
+              # Display entities value for each menu item
+              - script.execute: menu_values
+              - script.execute: ss_timeout
+
+
+  - platform: gpio
+    id: button_1
+    pin:
+      number: ${button}
+      inverted: true
+      mode: INPUT_PULLUP
+    on_press:
+      then:
+        # Execute screensaver action
+        - if:
+            condition:
+              and:
+                - lambda: 'return id(menu_current_node) == 0;'
+                - api.connected
+            then:
+              script.execute: button_1_ss_press
+
+        - lambda: |-
+            if(id(menu_set_mode)) {
+
+              id(menu_set_mode) = false;
+              id(rotary_dial).set_value(id(menu_position)[id(menu_level)]);
+            }
+            else {
+
+            if(id(menu_level) > 0) { //if we have anywhere to return
+
+              //set new current node to current parent
+              id(menu_current_node) = id(menu_parent)[id(menu_level)];
+              //return to previous level
+              --id(menu_level);
+              //reset rotary to position for current level
+              id(rotary_dial).set_value(id(menu_position)[id(menu_level)]);
+            } else {
+
+            if(id(menu_level) == 0) { //if we are at level 0, jump to saver
+
+              //set new current node to 0
+              id(menu_current_node) = 0;
+              //reset rotary to 0
+              id(rotary_dial).set_value(0);
+              //reset menu position for current level to 0
+              id(menu_position)[id(menu_level)] = 0;
+            } } }
+
+        - script.execute: ss_timeout
+
+  - platform: gpio
+    pin: ${pir}
+    name: ${friendlyName} Motion
+    device_class: motion
+
+  - platform: template
+    id: api_connected
+
+#####
+#####  CONFIGURATION BLOCK HERE
+#####
+
+  # Binary sensors from HomeAssistant
+  - platform: homeassistant
+    name: "HA sensor light.kitchen_counter_led"
+    entity_id: light.kitchen_counter_led
+    id: light_kitchen_counter_led
+    internal: true
+    on_state:
+      then:
+        # Logic to correctly update menu values
+        - script.execute: menu_values
+        - if:
+            condition:
+              lambda: 'return id(menu_set_mode);'
+            then:
+              - script.execute: menu_set_rotary
+        # End of menu values logic
+
+  - platform: homeassistant
+    name: "HA sensor light.wled_kitchen"
+    entity_id: light.wled_kitchen
+    id: light_wled_kitchen
+    internal: true
+    on_state:
+      then:
+        # Logic to correctly update menu values
+        - script.execute: menu_values
+        - if:
+            condition:
+              lambda: 'return id(menu_set_mode);'
+            then:
+              - script.execute: menu_set_rotary
+        # End of menu values logic
+
+  - platform: homeassistant
+    name: "HA sensor light.wled_dining_bottom"
+    entity_id: light.wled_dining_bottom
+    id: light_wled_dining_bottom
+    internal: true
+    on_state:
+      then:
+        # Logic to correctly update menu values
+        - script.execute: menu_values
+        - if:
+            condition:
+              lambda: 'return id(menu_set_mode);'
+            then:
+              - script.execute: menu_set_rotary
+        # End of menu values logic
+
+  - platform: homeassistant
+    name: "HA sensor light.wled_dining_top"
+    entity_id: light.wled_dining_top
+    id: light_wled_dining_top
+    internal: true
+    on_state:
+      then:
+        # Logic to correctly update menu values
+        - script.execute: menu_values
+        - if:
+            condition:
+              lambda: 'return id(menu_set_mode);'
+            then:
+              - script.execute: menu_set_rotary
+        # End of menu values logic
+
+
+#####  END OF CONFIGURATION BLOCK
