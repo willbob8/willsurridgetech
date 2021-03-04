@@ -1,0 +1,62 @@
+type: picture-elements
+elements:
+  - type: state-icon
+    entity: light.cave_left_light
+    style:
+      top: 5.5%
+      left: 3.3%
+      transform: 'scale(2,2)'
+    tap_action:
+      action: toggle
+  - type: icon
+    entity: camera.amcrest_camera
+    icon: 'mdi:cctv'
+    style:
+      top: 90%
+      left: 35%
+  - type: state-icon
+    entity: light.cave_main_light
+    style:
+      top: 47%
+      left: 27%
+      transform: 'scale(2,2)'
+  - type: state-icon
+    entity: light.bedside_left
+    style:
+      top: 92%
+      left: 69.9%
+      transform: 'scale(2,2)'
+  - type: state-icon
+    entity: light.bedroom
+    style:
+      top: 50%
+      left: 69.9%
+      transform: 'scale(2,2)'
+  - type: state-icon
+    entity: media_player.tv
+    style:
+      top: 9%
+      left: 39%
+      transform: 'scale(2,2)'
+  - type: state-icon
+    entity: media_player.bedroom
+    style:
+      top: 17%
+      left: 94%
+      transform: 'scale(2,2)'
+  - type: state-label
+    entity: sensor.cave_sb_temperature
+    style:
+      top: 10%
+      left: 20%
+      transform: 'scale(2,2)'
+  - type: service-button
+    title: Morning
+    service: input_boolean.turn_on
+    service_data:
+      entity_id: input_boolean.guest_mode
+    style:
+      top: 2%
+      left: 76%
+      transform: 'scale(2,2)'
+image: /local/SimpleFloorplan/Simple2.png
