@@ -1,0 +1,2338 @@
+[
+    {
+        "id": "4c220972.7f26c8",
+        "type": "switch",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ON",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "OFF",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 490,
+        "y": 120,
+        "wires": [
+            [
+                "7883117a.a742e"
+            ],
+            [
+                "e7e137a6.988a88"
+            ]
+        ]
+    },
+    {
+        "id": "7883117a.a742e",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.counter_led",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 690,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e7e137a6.988a88",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.counter_led",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 690,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4b884daa.88c1a4",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Kitchen Counter on overnight",
+        "info": "",
+        "x": 154,
+        "y": 44,
+        "wires": []
+    },
+    {
+        "id": "c959feca.984bc",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Automation on",
+        "server": "36a52212.74ceee",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.overnight_slug",
+        "state_type": "str",
+        "state_location": "automation",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 320,
+        "y": 120,
+        "wires": [
+            [
+                "4c220972.7f26c8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "89ae9821.4c1ea8",
+        "type": "light-scheduler",
+        "z": "87a5f02d.2013e",
+        "settings": "e24b44b.5aae5b8",
+        "events": "[{\"start\":{\"dow\":1,\"mod\":1320},\"end\":{\"dow\":2,\"mod\":0}},{\"start\":{\"dow\":1,\"mod\":0},\"end\":{\"dow\":1,\"mod\":360}},{\"start\":{\"dow\":2,\"mod\":0},\"end\":{\"dow\":2,\"mod\":360}},{\"start\":{\"dow\":3,\"mod\":0},\"end\":{\"dow\":3,\"mod\":360}},{\"start\":{\"dow\":4,\"mod\":0},\"end\":{\"dow\":4,\"mod\":360}},{\"start\":{\"dow\":5,\"mod\":0},\"end\":{\"dow\":5,\"mod\":360}},{\"start\":{\"dow\":6,\"mod\":0},\"end\":{\"dow\":6,\"mod\":360}},{\"start\":{\"dow\":0,\"mod\":0},\"end\":{\"dow\":0,\"mod\":360}},{\"start\":{\"dow\":2,\"mod\":1320},\"end\":{\"dow\":3,\"mod\":0}},{\"start\":{\"dow\":3,\"mod\":1320},\"end\":{\"dow\":4,\"mod\":0}},{\"start\":{\"dow\":4,\"mod\":1320},\"end\":{\"dow\":5,\"mod\":0}},{\"start\":{\"dow\":5,\"mod\":1320},\"end\":{\"dow\":6,\"mod\":0}},{\"start\":{\"dow\":6,\"mod\":1320},\"end\":{\"dow\":0,\"mod\":0}},{\"start\":{\"dow\":0,\"mod\":1320},\"end\":{\"dow\":1,\"mod\":0}}]",
+        "topic": "",
+        "name": "",
+        "onPayload": "ON",
+        "onPayloadType": "str",
+        "offPayload": "OFF",
+        "offPayloadType": "str",
+        "onlyWhenDark": false,
+        "scheduleRndMax": 0,
+        "sunElevationThreshold": 6,
+        "sunShowElevationInStatus": false,
+        "outputfreq": "output.statechange",
+        "x": 120,
+        "y": 120,
+        "wires": [
+            [
+                "c959feca.984bc"
+            ]
+        ]
+    },
+    {
+        "id": "78237ee2.3af0d",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Entrance Motion ON",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.entrance_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 130,
+        "y": 300,
+        "wires": [
+            [
+                "dc51ef34.6c8f6"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "dc51ef34.6c8f6",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.entrance",
+        "data": "{\"brightness\":255}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 480,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "273cb5d8.09159a",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.entrance",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 480,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a9440fbb.d7154",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Entrance motion light",
+        "info": "",
+        "x": 140,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "2c28e1be.1791fe",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Night time pee",
+        "info": "",
+        "x": 120,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "4208993f.d6b4c8",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Bed Door",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.bedroom_door",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 100,
+        "y": 620,
+        "wires": [
+            [
+                "81cf7fe0.5c913"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "81cf7fe0.5c913",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Sleeping?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.sleeping",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 260,
+        "y": 620,
+        "wires": [
+            [
+                "b728ceea.276ac"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b728ceea.276ac",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.wled_kitchen, light.wled_dining_top",
+        "data": "{\"brightness\":150,\"rgb_color\":[255,159,0],\"effect\":\"solid\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 440,
+        "y": 620,
+        "wires": [
+            [
+                "244f5026.2da54"
+            ]
+        ]
+    },
+    {
+        "id": "244f5026.2da54",
+        "type": "delay",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "30",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 180,
+        "y": 680,
+        "wires": [
+            [
+                "271b5369.d1ecdc"
+            ]
+        ]
+    },
+    {
+        "id": "271b5369.d1ecdc",
+        "type": "ha-wait-until",
+        "z": "87a5f02d.2013e",
+        "name": "Hall motion ON?",
+        "server": "cb3d56d5.2b87d8",
+        "outputs": 1,
+        "entityId": "binary_sensor.hall_motion",
+        "entityIdFilterType": "exact",
+        "property": "state",
+        "comparator": "is",
+        "value": "on",
+        "valueType": "str",
+        "timeout": 0,
+        "timeoutType": "num",
+        "timeoutUnits": "seconds",
+        "entityLocation": "",
+        "entityLocationType": "none",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "x": 360,
+        "y": 680,
+        "wires": [
+            [
+                "79af15f1.2e26ec"
+            ]
+        ]
+    },
+    {
+        "id": "a6e7ed4b.c0f75",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.wled_kitchen, light.wled_dining_top",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 760,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "79af15f1.2e26ec",
+        "type": "ha-wait-until",
+        "z": "87a5f02d.2013e",
+        "name": "Hall Motion OFF",
+        "server": "cb3d56d5.2b87d8",
+        "outputs": 2,
+        "entityId": "binary_sensor.hall_motion",
+        "entityIdFilterType": "exact",
+        "property": "state",
+        "comparator": "is",
+        "value": "off",
+        "valueType": "str",
+        "timeout": "120",
+        "timeoutType": "num",
+        "timeoutUnits": "seconds",
+        "entityLocation": "",
+        "entityLocationType": "none",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "x": 560,
+        "y": 680,
+        "wires": [
+            [
+                "a6e7ed4b.c0f75"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "ae55fb14.2fef98",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Recording?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.recording_scene",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 370,
+        "y": 1420,
+        "wires": [
+            [],
+            [
+                "9013add.fdc375"
+            ]
+        ]
+    },
+    {
+        "id": "3e59a26f.dc1dce",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON (cold)",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.cave",
+        "data": "{\"brightness\":255,\"color_temp\":251}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1100,
+        "y": 1380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "70da74c1.db1c9c",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Recording?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.recording_scene",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 370,
+        "y": 1520,
+        "wires": [
+            [],
+            [
+                "82bc003f.761b9"
+            ]
+        ]
+    },
+    {
+        "id": "851a65aa.8b00f8",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Test Light OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.cave_right_light",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 740,
+        "y": 1520,
+        "wires": [
+            [
+                "dc7be6c.6604b18"
+            ]
+        ]
+    },
+    {
+        "id": "417f1cae.828da4",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Cave",
+        "info": "",
+        "x": 90,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "3e0a08f1.d34d38",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Kitchen",
+        "info": "",
+        "x": 90,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "3cb89fdd.4ba11",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Main lights",
+        "info": "",
+        "x": 160,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "8e2050e0.7bce7",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Desk",
+        "info": "",
+        "x": 150,
+        "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "e60fa6a5.77db38",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Recording?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.recording_scene",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 370,
+        "y": 1640,
+        "wires": [
+            [],
+            [
+                "9ac96d1.e75609"
+            ]
+        ]
+    },
+    {
+        "id": "6624cba6.2684f4",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Desk ON",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "switch",
+        "service": "turn_on",
+        "entityId": "switch.cave",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1080,
+        "y": 1640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e74b1cd8.32bd5",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Recording?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.recording_scene",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 370,
+        "y": 1720,
+        "wires": [
+            [],
+            [
+                "ac43d84f.e00e78"
+            ]
+        ]
+    },
+    {
+        "id": "576598bb.40c988",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Desk OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "switch",
+        "service": "turn_off",
+        "entityId": "switch.cave",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1080,
+        "y": 1720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "adc00d36.5db42",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Kitchen Motion",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.kitchen_screen_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 120,
+        "y": 840,
+        "wires": [
+            [
+                "70eecd17.3e3374"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "70eecd17.3e3374",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Dinner?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.dinner_scene",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 300,
+        "y": 840,
+        "wires": [
+            [],
+            [
+                "3306d3d7.89b1ec"
+            ]
+        ]
+    },
+    {
+        "id": "a636f911.186538",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Kitchen Motion",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.kitchen_screen_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "off",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": "2",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 120,
+        "y": 920,
+        "wires": [
+            [
+                "d880b5e7.a9ebf8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d880b5e7.a9ebf8",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Dinner?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.dinner_scene",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 300,
+        "y": 920,
+        "wires": [
+            [],
+            [
+                "89393bef.9557a8"
+            ]
+        ]
+    },
+    {
+        "id": "89393bef.9557a8",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.kitchen_counter_led, light.wled_dining_bottom, light.wled_dining_top, light.wled_kitchen",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 820,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "919efba5.5f4168",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "LED Strips",
+        "info": "",
+        "x": 1080,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "7fdce3c7.7a0d5c",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Sitting Room",
+        "info": "",
+        "x": 110,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "5838b46f.beb30c",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Sitting Motion",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.sitting_room_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 110,
+        "y": 1120,
+        "wires": [
+            [
+                "3f66d1a6.9ad89e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f9218c79.8e15d",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON (warm)",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.sitting_room",
+        "data": "{\"brightness\":200,\"color_temp\":451}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 780,
+        "y": 1160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9da697ee.59e118",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Sitting Motion",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.sitting_room_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "off",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": "5",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 110,
+        "y": 1220,
+        "wires": [
+            [
+                "74cae580.a6dcbc"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2ea492eb.31c78e",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.sitting_room",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 600,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "74cae580.a6dcbc",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "TV?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "media_player.tv",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 270,
+        "y": 1220,
+        "wires": [
+            [],
+            [
+                "879161c1.a815c"
+            ]
+        ]
+    },
+    {
+        "id": "879161c1.a815c",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Sonos?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "media_player.sitting_room",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 420,
+        "y": 1220,
+        "wires": [
+            [],
+            [
+                "2ea492eb.31c78e"
+            ]
+        ]
+    },
+    {
+        "id": "d91b3f2c.8fcf3",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Entrance Motion OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.entrance_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "off",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": "20",
+        "forType": "num",
+        "forUnits": "seconds",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "273cb5d8.09159a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "3f66d1a6.9ad89e",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "light.sitting_room",
+        "state_type": "str",
+        "state_location": "lights",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 290,
+        "y": 1120,
+        "wires": [
+            [],
+            [
+                "67ed50da.e52b3"
+            ]
+        ]
+    },
+    {
+        "id": "67ed50da.e52b3",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "TV?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "media_player.tv",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 450,
+        "y": 1120,
+        "wires": [
+            [],
+            [
+                "4b53166d.5e5608"
+            ]
+        ]
+    },
+    {
+        "id": "4b53166d.5e5608",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Sun",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "above_horizon",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "sun.sun",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 590,
+        "y": 1120,
+        "wires": [
+            [
+                "6b0326a9.8aece8"
+            ],
+            [
+                "f9218c79.8e15d"
+            ]
+        ]
+    },
+    {
+        "id": "6b0326a9.8aece8",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON (cold)",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.sitting_room",
+        "data": "{\"brightness\":255,\"color_temp\":257}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 780,
+        "y": 1100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9013add.fdc375",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "light.cave",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 550,
+        "y": 1420,
+        "wires": [
+            [],
+            [
+                "5e1216b8.0d4718"
+            ]
+        ]
+    },
+    {
+        "id": "82bc003f.761b9",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "light.cave",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 550,
+        "y": 1520,
+        "wires": [
+            [
+                "851a65aa.8b00f8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "9ac96d1.e75609",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Desk ON?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "switch.cave",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 550,
+        "y": 1640,
+        "wires": [
+            [],
+            [
+                "ddeeaeca.cf788"
+            ]
+        ]
+    },
+    {
+        "id": "ac43d84f.e00e78",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Desk ON?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "switch.cave",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 550,
+        "y": 1720,
+        "wires": [
+            [
+                "3d553602.4b416a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d8877113.8db5a",
+        "type": "within-time-switch",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "nameInt": "",
+        "positionConfig": "b954ab15.fd5738",
+        "startTime": "06:00",
+        "startTimeType": "entered",
+        "startOffset": 0,
+        "startOffsetType": "none",
+        "startOffsetMultiplier": 60000,
+        "endTime": "19:00",
+        "endTimeType": "entered",
+        "endOffset": 0,
+        "endOffsetType": "none",
+        "endOffsetMultiplier": 60000,
+        "timeDays": "*",
+        "timeOnlyOddDays": false,
+        "timeOnlyEvenDays": false,
+        "timeMonths": "*",
+        "timedatestart": "",
+        "timedateend": "",
+        "propertyStart": "",
+        "propertyStartType": "none",
+        "propertyStartCompare": "true",
+        "propertyStartThreshold": "",
+        "propertyStartThresholdType": "num",
+        "startTimeAlt": "",
+        "startTimeAltType": "entered",
+        "startOffsetAlt": 0,
+        "startOffsetAltType": "none",
+        "startOffsetAltMultiplier": 60000,
+        "propertyEnd": "",
+        "propertyEndType": "none",
+        "propertyEndCompare": "true",
+        "propertyEndThreshold": "",
+        "propertyEndThresholdType": "num",
+        "endTimeAlt": "",
+        "endTimeAltType": "entered",
+        "endOffsetAlt": 0,
+        "endOffsetAltType": "none",
+        "endOffsetAltMultiplier": 60000,
+        "tsCompare": "0",
+        "x": 890,
+        "y": 1420,
+        "wires": [
+            [
+                "3e59a26f.dc1dce"
+            ],
+            [
+                "24d0ed2a.615672"
+            ]
+        ]
+    },
+    {
+        "id": "24d0ed2a.615672",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON (warm)",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.cave",
+        "data": "{\"brightness\":200,\"color_temp\":451}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1100,
+        "y": 1440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ddeeaeca.cf788",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Sleeping?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.sleeping",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 720,
+        "y": 1640,
+        "wires": [
+            [],
+            [
+                "1e272c38.2dd894"
+            ]
+        ]
+    },
+    {
+        "id": "5e1216b8.0d4718",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Sleeping?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.sleeping",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 720,
+        "y": 1420,
+        "wires": [
+            [],
+            [
+                "d8877113.8db5a"
+            ]
+        ]
+    },
+    {
+        "id": "5b3c6e7b.5886d",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "light.entrance",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 290,
+        "y": 360,
+        "wires": [
+            [],
+            [
+                "8de8c4f6.7568b8"
+            ]
+        ]
+    },
+    {
+        "id": "2e4d7cb4.104ed4",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Front door",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.front_door",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 100,
+        "y": 360,
+        "wires": [
+            [
+                "5b3c6e7b.5886d"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8de8c4f6.7568b8",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.entrance",
+        "data": "{\"brightness\":255}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 480,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1e272c38.2dd894",
+        "type": "within-time-switch",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "nameInt": "",
+        "positionConfig": "b954ab15.fd5738",
+        "startTime": "08:00",
+        "startTimeType": "entered",
+        "startOffset": 0,
+        "startOffsetType": "none",
+        "startOffsetMultiplier": 60000,
+        "endTime": "18:00",
+        "endTimeType": "entered",
+        "endOffset": 0,
+        "endOffsetType": "none",
+        "endOffsetMultiplier": 60000,
+        "timeDays": "1,2,3,4,5",
+        "timeOnlyOddDays": false,
+        "timeOnlyEvenDays": false,
+        "timeMonths": "*",
+        "timedatestart": "",
+        "timedateend": "",
+        "propertyStart": "",
+        "propertyStartType": "none",
+        "propertyStartCompare": "true",
+        "propertyStartThreshold": "",
+        "propertyStartThresholdType": "num",
+        "startTimeAlt": "",
+        "startTimeAltType": "entered",
+        "startOffsetAlt": 0,
+        "startOffsetAltType": "none",
+        "startOffsetAltMultiplier": 60000,
+        "propertyEnd": "",
+        "propertyEndType": "none",
+        "propertyEndCompare": "true",
+        "propertyEndThreshold": "",
+        "propertyEndThresholdType": "num",
+        "endTimeAlt": "",
+        "endTimeAltType": "entered",
+        "endOffsetAlt": 0,
+        "endOffsetAltType": "none",
+        "endOffsetAltMultiplier": 60000,
+        "tsCompare": "0",
+        "x": 890,
+        "y": 1640,
+        "wires": [
+            [
+                "6624cba6.2684f4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "3306d3d7.89b1ec",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Sleeping?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.sleeping",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 460,
+        "y": 840,
+        "wires": [
+            [],
+            [
+                "8c367f1c.c67c3"
+            ]
+        ]
+    },
+    {
+        "id": "cb869f1c.7ac34",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON (cold)",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.kitchen_counter_led, light.wled_dining_bottom, light.wled_dining_top, light.wled_kitchen",
+        "data": "{\"brightness\":255,\"rgb_color\":[255,255,255]}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 840,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8c367f1c.c67c3",
+        "type": "within-time-switch",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "nameInt": "",
+        "positionConfig": "b954ab15.fd5738",
+        "startTime": "07:00",
+        "startTimeType": "entered",
+        "startOffset": 0,
+        "startOffsetType": "none",
+        "startOffsetMultiplier": 60000,
+        "endTime": "19:00",
+        "endTimeType": "entered",
+        "endOffset": 0,
+        "endOffsetType": "none",
+        "endOffsetMultiplier": 60000,
+        "timeDays": "*",
+        "timeOnlyOddDays": false,
+        "timeOnlyEvenDays": false,
+        "timeMonths": "*",
+        "timedatestart": "",
+        "timedateend": "",
+        "propertyStart": "",
+        "propertyStartType": "none",
+        "propertyStartCompare": "true",
+        "propertyStartThreshold": "",
+        "propertyStartThresholdType": "num",
+        "startTimeAlt": "",
+        "startTimeAltType": "entered",
+        "startOffsetAlt": 0,
+        "startOffsetAltType": "none",
+        "startOffsetAltMultiplier": 60000,
+        "propertyEnd": "",
+        "propertyEndType": "none",
+        "propertyEndCompare": "true",
+        "propertyEndThreshold": "",
+        "propertyEndThresholdType": "num",
+        "endTimeAlt": "",
+        "endTimeAltType": "entered",
+        "endOffsetAlt": 0,
+        "endOffsetAltType": "none",
+        "endOffsetAltMultiplier": 60000,
+        "tsCompare": "0",
+        "x": 630,
+        "y": 840,
+        "wires": [
+            [
+                "cb869f1c.7ac34"
+            ],
+            [
+                "f0b9cf6e.215f5"
+            ]
+        ]
+    },
+    {
+        "id": "f0b9cf6e.215f5",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON (warm)",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.kitchen_counter_led, light.wled_dining_bottom, light.wled_dining_top, light.wled_kitchen",
+        "data": "{\"brightness\":200,\"rgb_color\":[255, 179, 0]}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 840,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "100324fc.1803eb",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Cave Occupancy",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.cave_occupancy",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 180,
+        "y": 1460,
+        "wires": [
+            [
+                "ae55fb14.2fef98"
+            ],
+            [
+                "70da74c1.db1c9c"
+            ]
+        ]
+    },
+    {
+        "id": "43c48ae3.6d53d4",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Cave Occupancy",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.cave_occupancy",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 180,
+        "y": 1680,
+        "wires": [
+            [
+                "e60fa6a5.77db38"
+            ],
+            [
+                "e74b1cd8.32bd5"
+            ]
+        ]
+    },
+    {
+        "id": "e962c60c.baf248",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_off",
+        "entityId": "light.cave",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1080,
+        "y": 1560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d2c2d9b4.8a0c58",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Light ON",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "light",
+        "service": "turn_on",
+        "entityId": "light.cave_right_light",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1080,
+        "y": 1500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3d553602.4b416a",
+        "type": "delay",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "20",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 720,
+        "y": 1720,
+        "wires": [
+            [
+                "f4cb13f5.c9771"
+            ]
+        ]
+    },
+    {
+        "id": "f4cb13f5.c9771",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Occupancy?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": false,
+        "entity_id": "input_boolean.cave_occupancy",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 890,
+        "y": 1720,
+        "wires": [
+            [],
+            [
+                "576598bb.40c988"
+            ]
+        ]
+    },
+    {
+        "id": "dc7be6c.6604b18",
+        "type": "ha-wait-until",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "outputs": 2,
+        "entityId": "input_boolean.cave_occupancy",
+        "entityIdFilterType": "exact",
+        "property": "state",
+        "comparator": "is",
+        "value": "on",
+        "valueType": "str",
+        "timeout": "20",
+        "timeoutType": "num",
+        "timeoutUnits": "seconds",
+        "entityLocation": "",
+        "entityLocationType": "none",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "x": 920,
+        "y": 1520,
+        "wires": [
+            [
+                "d2c2d9b4.8a0c58"
+            ],
+            [
+                "e962c60c.baf248"
+            ]
+        ]
+    },
+    {
+        "id": "6940ac07.995d24",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Cave Motion",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.cave_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 170,
+        "y": 1880,
+        "wires": [
+            [
+                "a4d2fdfc.b7091"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b16bf0d6.8e7c9",
+        "type": "comment",
+        "z": "87a5f02d.2013e",
+        "name": "Occupancy",
+        "info": "",
+        "x": 160,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "eb94ce67.94684",
+        "type": "api-current-state",
+        "z": "87a5f02d.2013e",
+        "name": "Door OPEN?",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": true,
+        "entity_id": "binary_sensor.cave_door",
+        "state_type": "str",
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "blockInputOverrides": false,
+        "x": 560,
+        "y": 1880,
+        "wires": [
+            [
+                "82a0426f.a203"
+            ],
+            [
+                "b8b97fc9.dfad3"
+            ]
+        ]
+    },
+    {
+        "id": "a4d2fdfc.b7091",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Occupancy ON",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_on",
+        "entityId": "input_boolean.cave_occupancy",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 370,
+        "y": 1880,
+        "wires": [
+            [
+                "eb94ce67.94684"
+            ]
+        ]
+    },
+    {
+        "id": "f8a79f6f.ca6f5",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Motion OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.cave_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "off",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": "3",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 560,
+        "y": 1820,
+        "wires": [
+            [
+                "82a0426f.a203"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b8b97fc9.dfad3",
+        "type": "ha-wait-until",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "outputs": 1,
+        "entityId": "binary_sensor.cave_door",
+        "entityIdFilterType": "exact",
+        "property": "state",
+        "comparator": "is",
+        "value": "on",
+        "valueType": "str",
+        "timeout": 0,
+        "timeoutType": "num",
+        "timeoutUnits": "seconds",
+        "entityLocation": "",
+        "entityLocationType": "none",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "x": 770,
+        "y": 1960,
+        "wires": [
+            [
+                "d14602ec.abf32"
+            ]
+        ]
+    },
+    {
+        "id": "d8b369c.1e60f98",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Occupancy OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_off",
+        "entityId": "input_boolean.cave_occupancy",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 1110,
+        "y": 1960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "82a0426f.a203",
+        "type": "join-wait",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "paths": "[\"binary_sensor.cave_motion\",\"binary_sensor.cave_door\"]",
+        "pathsToExpire": "",
+        "useRegex": false,
+        "warnUnmatched": true,
+        "pathTopic": "topic",
+        "pathTopicType": "msg",
+        "correlationTopic": "",
+        "correlationTopicType": "undefined",
+        "timeout": "4",
+        "timeoutUnits": "60000",
+        "exactOrder": "false",
+        "firstMsg": "true",
+        "mapPayload": "false",
+        "disableComplete": false,
+        "persistOnRestart": false,
+        "x": 770,
+        "y": 1880,
+        "wires": [
+            [
+                "f3788cf8.b406e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f3788cf8.b406e",
+        "type": "api-call-service",
+        "z": "87a5f02d.2013e",
+        "name": "Occupancy OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_off",
+        "entityId": "input_boolean.cave_occupancy",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "output_location": "",
+        "output_location_type": "none",
+        "mustacheAltTags": false,
+        "x": 950,
+        "y": 1880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d14602ec.abf32",
+        "type": "join-wait",
+        "z": "87a5f02d.2013e",
+        "name": "",
+        "paths": "[\"binary_sensor.cave_motion\",\"binary_sensor.cave_door\"]",
+        "pathsToExpire": "",
+        "useRegex": false,
+        "warnUnmatched": true,
+        "pathTopic": "topic",
+        "pathTopicType": "msg",
+        "correlationTopic": "",
+        "correlationTopicType": "undefined",
+        "timeout": "90",
+        "timeoutUnits": "1000",
+        "exactOrder": "false",
+        "firstMsg": "true",
+        "mapPayload": "false",
+        "disableComplete": false,
+        "persistOnRestart": false,
+        "x": 930,
+        "y": 1960,
+        "wires": [
+            [
+                "d8b369c.1e60f98"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "af770995.c812d8",
+        "type": "server-state-changed",
+        "z": "87a5f02d.2013e",
+        "name": "Motion OFF",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "binary_sensor.cave_motion",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "off",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": "1",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "x": 760,
+        "y": 2020,
+        "wires": [
+            [
+                "d14602ec.abf32"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "36a52212.74ceee",
+        "type": "server",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    },
+    {
+        "id": "e24b44b.5aae5b8",
+        "type": "light-scheduler-settings",
+        "name": "my settings",
+        "latitude": "50.7298417",
+        "longitude": "-3.5307296"
+    },
+    {
+        "id": "cb3d56d5.2b87d8",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true
+    },
+    {
+        "id": "b954ab15.fd5738",
+        "type": "position-config",
+        "name": "",
+        "isValide": "true",
+        "longitude": "0",
+        "latitude": "0",
+        "angleType": "deg",
+        "timeZoneOffset": "99",
+        "timeZoneDST": "0",
+        "stateTimeFormat": "3",
+        "stateDateFormat": "12"
+    }
+]
