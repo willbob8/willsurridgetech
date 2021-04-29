@@ -1,0 +1,27 @@
+temperature_toggle:
+  alias: Temperature trigger
+  sequence:
+  - choose:
+    - conditions:
+        condition: template
+        value_template: '{{ state_attr( ''climate.'' ~room , ''temperature'') > 20
+          }}'
+      sequence:
+      - service: climate.set_temperature
+        data:
+          entity_id: '{{ ''climate.'' ~room }}'
+          temperature: 13
+    - conditions:
+        condition: template
+        value_template: '{{ state_attr( ''climate.'' ~room , ''temperature'') < 15
+          }}'
+      sequence:
+      - service: climate.set_temperature
+        data:
+          entity_id: '{{ ''climate.'' ~room }}'
+          temperature: 18
+    default:
+    - service: climate.set_temperature
+      data:
+        entity_id: '{{ ''climate.'' ~room }}'
+        temperature: 21
