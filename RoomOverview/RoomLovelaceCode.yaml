@@ -1,0 +1,101 @@
+views:
+  - title: Home
+    path: home
+    theme: kibibit-dark-cards
+    badges: []
+    cards:
+      - type: 'custom:search-card'
+        max_results: 10
+      - type: 'custom:banner-card'
+        heading: Bedroom
+        link: bedroom
+        entities:
+          - entity: light.bedroom
+            name: Light
+          - entity: binary_sensor.florries_desk
+            name: Desk
+          - entity: input_boolean.sleeping
+          - entity: media_player.bedroom
+            name: null
+          - entity: climate.bedroom
+            attribute: current_temperature
+            name: Temp
+          - entity: climate.bedroom
+            attribute: temperature
+            name: Set
+            action:
+              service: script.temperature_toggle
+              room: bedroom
+          - entity: input_boolean.bed_occupancy
+            name: Occupancy
+            domain: binary_sensor
+            action:
+              service: input_boolean.toggle
+      - type: entities
+        entities:
+          - entity: input_boolean.guest_mode
+          - entity: input_boolean.sleeping
+          - entity: input_boolean.dinner_scene
+          - entity: input_boolean.cooking_scene
+          - entity: input_boolean.retire_scene
+  - title: Bedroom
+    path: bedroom
+    theme: kibibit-dark-cards
+    badges: []
+    cards:
+      - type: 'custom:vertical-stack-in-card'
+        title: Ligthing
+        cards:
+          - type: 'custom:paper-buttons-row'
+            buttons:
+              - entity: script.bed_day
+                icon: 'mdi:white-balance-sunny'
+                name: false
+              - entity: script.bed_relax
+                icon: 'mdi:book-open-page-variant'
+                name: false
+              - entity: script.bed_sleep
+                icon: 'mdi:sleep'
+                name: false
+          - type: entities
+            entities:
+              - light.bedroom
+              - light.desk
+              - light.bedside_left
+              - light.bedside_right
+              - light.bedroom_light
+      - type: glance
+        entities:
+          - entity: binary_sensor.bedroom_door
+          - entity: binary_sensor.bedroom_motion
+          - entity: input_boolean.bed_occupancy
+        state_color: false
+      - type: entities
+        entities:
+          - entity: input_datetime.alarm_time
+          - entity: input_boolean.alarm
+          - entity: input_boolean.bed_scene
+          - entity: input_boolean.sleep_scene
+          - entity: input_boolean.morning_scene
+        title: Sleep
+        show_header_toggle: false
+      - type: 'custom:mini-media-player'
+        entity: media_player.bedroom
+        artwork: cover
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.sitting_room
+              name: Sitting Room
+            - entity_id: media_player.cave
+              name: Cave
+            - entity_id: media_player.kitchen
+              name: Kitchen
+      - type: thermostat
+        entity: climate.bedroom
+      - type: button
+        tap_action:
+          action: navigate
+          navigation_path: home
+        icon: 'mdi:home'
