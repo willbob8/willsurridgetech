@@ -1,0 +1,34 @@
+binary_sensor:
+  - platform: tod
+    name: Morning
+    after: sunrise
+    after_offset: "-02:00"
+    before: "12:00"
+  - platform: tod
+    name: Afternoon
+    after: "12:00"
+    before: "17:00"
+  - platform: tod
+    name: Evening
+    after: "17:00"
+    before: "22:00"
+  - platform: tod
+    name: Night
+    after: "22:00"
+    before: sunrise
+
+sensor:
+  - platform: template
+    sensors:
+      time_of_day:
+        friendly_name: "Time of Day"
+        value_template: >-
+          {% if is_state('binary_sensor.morning','on') %}
+            Morning  
+          {% elif is_state('binary_sensor.afternoon','on') %}
+            Afternoon 
+          {% elif is_state('binary_sensor.evening','on') %}
+            Evening
+          {% else %}
+            Night
+          {% endif %}
