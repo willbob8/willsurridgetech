@@ -1,0 +1,233 @@
+[
+    {
+        "id": "9ecd78d69123d4fa",
+        "type": "server-state-changed",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 3,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.sonos_tts",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 210,
+        "y": 720,
+        "wires": [
+            [
+                "81b3e921dd37feb6",
+                "90828d691a1beb9c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "81b3e921dd37feb6",
+        "type": "api-current-state",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 2,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_select.sonos_tts",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "room",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 320,
+        "y": 780,
+        "wires": [
+            [
+                "52c44d3bdaef5e74"
+            ]
+        ]
+    },
+    {
+        "id": "52c44d3bdaef5e74",
+        "type": "api-current-state",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 2,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_text.sonos_tts",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "message",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 410,
+        "y": 820,
+        "wires": [
+            [
+                "220c3479aea433e1"
+            ]
+        ]
+    },
+    {
+        "id": "220c3479aea433e1",
+        "type": "function",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "func": "let player\nlet text = msg.message\n\nswitch (msg.room)\n{\n  case 'Sitting Room':\n    player = 'RINCON_XXXXXXXXXX'\n    break;\n  case 'Bedroom':\n    player = \"RINCON_XXXXXXXXXX\"\n    break;\n  case 'Kitchen':\n    player = \"RINCON_XXXXXXXXXX\"\n    break;\n  default:\n    player = \"RINCON_XXXXXXXXXX\"\n    break;\n}\n\nmsg.url = \"http://192.168.0.101:8349/api/speakText?playerId=\" + player + \"&text='\" + text + \"'&volume=20\"\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 860,
+        "wires": [
+            [
+                "26b3c6b0d222d3a6"
+            ]
+        ]
+    },
+    {
+        "id": "26b3c6b0d222d3a6",
+        "type": "http request",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 540,
+        "y": 900,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "90828d691a1beb9c",
+        "type": "delay",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "x": 550,
+        "y": 720,
+        "wires": [
+            [
+                "4e9128363a8dfeb0"
+            ]
+        ]
+    },
+    {
+        "id": "4e9128363a8dfeb0",
+        "type": "api-call-service",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 3,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_off",
+        "entityId": "input_boolean.sonos_tts",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 770,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cb3d56d5.2b87d8",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 1,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    }
+]
