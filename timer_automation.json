@@ -1,0 +1,322 @@
+[
+    {
+        "id": "ee20d65c95896558",
+        "type": "server-state-changed",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 3,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "input_boolean.timer",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 2,
+        "output_only_on_state_change": true,
+        "for": 0,
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 170,
+        "y": 1620,
+        "wires": [
+            [
+                "34525d69adc0a2c1",
+                "5ada588db61e2afc"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "34525d69adc0a2c1",
+        "type": "api-current-state",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 2,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.timer_duration",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 320,
+        "y": 1680,
+        "wires": [
+            [
+                "5a185758f6b2f132"
+            ]
+        ]
+    },
+    {
+        "id": "5a185758f6b2f132",
+        "type": "function",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "func": "msg.payload = msg.payload * 5\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 1720,
+        "wires": [
+            [
+                "853026cb22f7a60b"
+            ]
+        ]
+    },
+    {
+        "id": "853026cb22f7a60b",
+        "type": "api-call-service",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 3,
+        "debugenabled": false,
+        "service_domain": "timer",
+        "service": "start",
+        "entityId": "timer.timer",
+        "data": "{    \"duration\": {{payload}}}",
+        "dataType": "json",
+        "mergecontext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 410,
+        "y": 1760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5ada588db61e2afc",
+        "type": "delay",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "x": 450,
+        "y": 1620,
+        "wires": [
+            [
+                "6bd2808a1e728c9e"
+            ]
+        ]
+    },
+    {
+        "id": "6bd2808a1e728c9e",
+        "type": "api-call-service",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 3,
+        "debugenabled": false,
+        "service_domain": "input_boolean",
+        "service": "turn_off",
+        "entityId": "input_boolean.timer",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 650,
+        "y": 1620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ac1c7cca820a3e1b",
+        "type": "server-events",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 1,
+        "event_type": "timer.finished",
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "waitForRunning": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "$outputData(\"eventData\").event_type",
+                "valueType": "jsonata"
+            }
+        ],
+        "x": 160,
+        "y": 1840,
+        "wires": [
+            [
+                "86356c4206308dd5"
+            ]
+        ]
+    },
+    {
+        "id": "86356c4206308dd5",
+        "type": "switch",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "property": "payload.entity_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "timer.timer",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 190,
+        "y": 1900,
+        "wires": [
+            [
+                "2dd34a10175617e3",
+                "08bdd9df926d1d3c"
+            ]
+        ]
+    },
+    {
+        "id": "2dd34a10175617e3",
+        "type": "api-call-service",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 3,
+        "debugenabled": false,
+        "service_domain": "persistent_notification",
+        "service": "create",
+        "entityId": "",
+        "data": "{\"message\":\"Timer Ended!\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 440,
+        "y": 1940,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "08bdd9df926d1d3c",
+        "type": "api-call-service",
+        "z": "79cb638c.fe770c",
+        "name": "",
+        "server": "cb3d56d5.2b87d8",
+        "version": 3,
+        "debugenabled": false,
+        "service_domain": "counter",
+        "service": "increment",
+        "entityId": "counter.timer_counter",
+        "data": "",
+        "dataType": "jsonata",
+        "mergecontext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 400,
+        "y": 1880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cb3d56d5.2b87d8",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 1,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    }
+]
