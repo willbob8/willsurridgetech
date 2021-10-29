@@ -1,0 +1,59 @@
+esphome:
+  name: power
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifiSSID
+  password: !secret wifiPass
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "power"
+    password: "powerpower"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret passESPH
+
+ota:
+  password: !secret passOTA
+
+sensor:
+  - platform: ct_clamp
+    sensor: adc_sensor
+    name: "Measured Current"
+    update_interval: 5s
+    id: measured_current
+    filters:
+      - calibrate_linear:
+          # Measured value of 0 maps to 0A
+          - 0 -> 0
+          # Known load: 5.0A - change this!
+          # Value shown in logs: 0.01229A - change this!
+          - 0.01229 -> 5
+
+  # Example source sensor
+  - platform: adc
+    pin: A0
+    id: adc_sensor
+    
+  - platform: total_daily_energy
+    name: "Total Daily Power"
+    power_id: my_power
+
+  - platform: template
+    id: my_power
+    name: "Measured Power"
+    lambda: return id(measured_current).state * 230.0 / 1000;
+    unit_of_measurement: 'kW'
+    update_interval: 5s
+
+time:
+  - platform: sntp
+    id: my_time
