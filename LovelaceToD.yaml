@@ -1,0 +1,251 @@
+##### SENSOR CONFIG
+binary_sensor:
+  - platform: workday
+    country: GB
+
+sensor:
+  - platform: template
+    sensors:
+      lovelace_tod:
+        friendly_name: "Lovelace ToD"
+        value_template: ->
+          {% if is_state("binary_sensor.workday_sensor", "on") %}
+          {% if now() < today_at("09:15") %}
+          work_morning
+          {% elif now() < today_at("17:00") %}
+          workday
+          {% elif now() < today_at("20:00") %}
+          evening
+          {% else %}
+          night
+          {% endif %}
+          {% else %}
+          {% if now() < today_at("10:15") %}
+          weekend_morning
+          {% elif now() < today_at("17:00") %}
+          weekend_day
+          {% elif now() < today_at("20:00") %}
+          evening
+          {% else %}
+          night
+          {% endif %}
+          {% endif %}
+
+
+##### LOVELACE CONFIG
+  - title: ToD
+    path: ToD
+    theme: kibibit-dark-cards
+    badges: []
+    cards:
+      - type: custom:digital-clock
+        dateFormat:
+          weekday: long
+          day: 2-digit
+          month: long
+          comma: null
+      - type: weather-forecast
+        entity: weather.6sr
+      - type: conditional
+        conditions:
+          - entity: sensor.lovelace_tod
+            state: '->   work_morning'
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              entities:
+                - entity: input_boolean.sleeping
+                - entity: input_boolean.morning_scene
+                - entity: input_number.workout_duration
+              title: Morning
+      - type: conditional
+        conditions:
+          - entity: sensor.lovelace_tod
+            state: '->   workday'
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              entities:
+                - entity: light.cave_all
+              title: Workday
+            - type: custom:mini-media-player
+              artwork: cover
+              speaker_group:
+                platform: sonos
+                show_group_count: true
+                entities:
+                  - entity_id: media_player.sitting_room
+                    name: Sitting Room
+                  - entity_id: media_player.cave
+                    name: Cave
+                  - entity_id: media_player.kitchen
+                    name: Kitchen
+                  - entity_id: media_player.sonos_roam
+                    name: Roam
+              group: false
+              entity: media_player.cave
+            - type: thermostat
+              entity: climate.cave
+      - type: conditional
+        conditions:
+          - entity: sensor.lovelace_tod
+            state: '->   evening'
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              entities:
+                - entity: input_boolean.cooking_scene
+                - entity: input_boolean.dinner_scene
+                - entity: input_boolean.retire_scene
+                - entity: light.dining_bulbs
+                - entity: script.sitting_tv
+              title: Evening
+              show_header_toggle: false
+            - type: custom:mini-media-player
+              artwork: cover
+              speaker_group:
+                platform: sonos
+                show_group_count: true
+                entities:
+                  - entity_id: media_player.sitting_room
+                    name: Sitting Room
+                  - entity_id: media_player.cave
+                    name: Cave
+                  - entity_id: media_player.kitchen
+                    name: Kitchen
+                  - entity_id: media_player.sonos_roam
+                    name: Roam
+              group: false
+              entity: media_player.sonos_roam
+            - type: thermostat
+              entity: climate.living_room
+      - type: conditional
+        conditions:
+          - entity: sensor.lovelace_tod
+            state: '-> weekend_day'
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              entities:
+                - entity: input_select.follow_host
+                - entity: input_boolean.follow_music
+              title: Weekend
+            - type: custom:mini-media-player
+              artwork: cover
+              speaker_group:
+                platform: sonos
+                show_group_count: true
+                entities:
+                  - entity_id: media_player.sitting_room
+                    name: Sitting Room
+                  - entity_id: media_player.cave
+                    name: Cave
+                  - entity_id: media_player.kitchen
+                    name: Kitchen
+                  - entity_id: media_player.sonos_roam
+                    name: Roam
+              group: false
+              entity: media_player.cave
+            - type: thermostat
+              entity: climate.cave
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /room-overview/bedroom
+                icon: mdi:bed
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /room-overview/kitchen
+                icon: mdi:chef-hat
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /room-overview/cave
+                icon: mdi:desk
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /room-overview/sitting
+                icon: mdi:sofa
+          - type: horizontal-stack
+            cards:
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-type/lighting
+                icon: mdi:lightbulb-on-outline
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-type/media
+                icon: mdi:cast
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-type/heating
+                icon: mdi:radiator
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-type/inputs
+                icon: mdi:toggle-switch
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-type/cctv
+                icon: mdi:cctv
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-type/network
+                icon: mdi:access-point-network
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-type/devices
+                icon: mdi:tablet
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-type/batteries
+                icon: mdi:battery
+      - type: conditional
+        conditions:
+          - entity: sensor.lovelace_tod
+            state: '->   night'
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              entities:
+                - entity: input_datetime.alarm_time
+                - entity: input_boolean.alarm
+                - entity: input_boolean.bed_scene
+                - entity: input_boolean.sleep_scene
+              title: Night
+              show_header_toggle: false
+            - type: custom:mini-media-player
+              artwork: cover
+              speaker_group:
+                platform: sonos
+                show_group_count: true
+                entities:
+                  - entity_id: media_player.sitting_room
+                    name: Sitting Room
+                  - entity_id: media_player.cave
+                    name: Cave
+                  - entity_id: media_player.kitchen
+                    name: Kitchen
+                  - entity_id: media_player.sonos_roam
+                    name: Roam
+              group: false
+              entity: media_player.bedroom
